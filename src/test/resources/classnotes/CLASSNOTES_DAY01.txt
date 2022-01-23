@@ -1,0 +1,370 @@
+
+01/23/2022
+----------
+
+Welcome back.
+
+API Testing and Automation Day 1.
+
+- Java Programming -
+UI: Selenium + Java + other tools
+Database: SQL > JDBC + Java
+API: REST Api : Test manually -> Postman
+			  : Automation -> Java + RestAssured library
+
+In job market, there are many automatioin jobs with
+	-> Just Selenium UI
+	-> UI + SQL database
+	-> API testing automation
+	-> All layers of Automation + UI, Database, API
+====================================================
+
+API -> Application Programming Interface
+
+We can look at it as a middle man, or middle layer.
+
+Real world example:
+	We go to expedia and search for flight to Maldives.
+
+	Expedia shows flight results from Qatar, Emirates, Turkish airlines.
+
+	All flight data from different airlines are stores in their databases. Ex Qatar Airlines database contains all flight details, prices, seats etc
+
+	But Expedia cannot access the database of airline companies.
+
+	So what happens is : each airline will develop an API that other applications can send request for flight information. This way, database is secure without external access. and API can control what data to return to the requesting application like Expedia, Google Flights, Priceline etc
+======================================
+
+Another example:
+	When we try to register for Etsy, we have several options:
+		-> we can fillout the form and register directly with Etsy UI website
+		OR
+		-> We can use Google, Facebook, Apple accounts to register:
+			-> Lets say we use google account:
+				When we click on Google option, it is asking to sign in to our google account
+
+				Google API will share your information(name, email, dob) with Etsy
+========================================================
+
+ 2 main types of usages of API:
+
+ #1) Sharing information between seperate applications.
+ Turkish airlines API sharing flight info with Expedia.
+
+ Google API is sharing info with Etsy
+
+ One application will send request to another applications's API, then API will send response will requested information.
+
+ REQUEST  ----> API
+ RESPONSE <---- API
+
+ #2) API can be used to build backend of single application.
+
+ So API part will be middle man between UI and Database. Just like we saw in the image.
+ UI --> API --> Database
+
+ It is not for sharing data with different application, it is for a single application.
+
+ it provides safer, more organized back end code and front end/UI can use the data provided by the API.
+=======================
+
+API is written using a programming language and it has some URLs where you can send request to. and API will send you back the RESPONSE.
+
+Nowadays, almost all applications back end part is developed
+using API style.
+
+Amazon UI --> Amazon API --> Amazon database
+
+When we search for item on Amazon.com, it will return the results from database.
+
+Actually, when we click search it is sending  a REQUEST to Amazon API and API is accessing the database and returning a RESPONSE with all product information.
+
+=============================
+
+Lets say you joined a brand new project and application is about to be developed:
+	-> First Database is developed: create database , add tables , columns, relations between tables.
+	-> API is developed to communicate with database.
+		- API will do the processing of data, also business requirements
+		-> Testing Can start early with API testing.
+		-> No need for UI to test api
+
+	-> UI -> After API is developed UI will be the front end where Users will interact with application
+=======================================
+
+API -> Application programming interface
+
+	2 Main types:
+		-> SOAP
+		-> Rest
+
+
+SOAP:
+	Soap (Simple Object Access Protocol)
+	It is based on XML
+	Request and response are in XML format, like Pom.xml with tags
+
+REST:
+	REST(Representational State of Transfer) is a lightweight option for developing web services using the HTTP protocol.
+	• It can structure data into XML or any other machine readable format, but usually JSON
+	• Rest is very data driven, compared to SOAP, which is strongly function driven.
+
+SOAP is slower and XML bases. But more secure.
+Banks, or other financial applications might be using SOAP for some critical operations
+
+REST is lightweight, easy to develop and use, much more popular than SOAP Api.
+
+We also call APIs --> WEB SERVICE, OR JUST SERVICE
+
+----------------
+
+Janina Romanenko — Today at 11:51 AM
+Murodil, we often hear - its cheaper to fix a bag in earlier stages. But what type of costs we are talking about? Working hours of developers and testers?
+anything else?
+Yes mostly, Working hours of developers. Effort of developer.
+	later that broken code could be used by many other codes/classes so all usages needs to be confirmed working with new changes
+
+Fahima Eldarrat — Today at 11:58 AM
+how about if we searching in United's website  directly ?it is not API in this case
+
+United UI -> United API -> Database
+OR
+
+Skyscanner UI -> United API -> Database
+========================================
+
+How to test API?
+
+API testing is based on REQUEST AND RESPONSE.
+
+We send REQUEST to API url and verify the RESPONSE
+
+There are 2 actor here
+
+CLIENT and SERVER
+
+CLIENT is different app, UI of same app, Your Java code, Browser.
+CLIENT is whoever is sending A REQUEST to API
+
+SERVER is API/Web Service
+========
+
+When I do RESTful API testing, I send different types of REQUESTS to API urls and verify/assert that RESPONSE is as expected.
+
+https://sandbox.api.service.nhs.uk/hello-world/hello/world
+
+Lets send request to above REST Api Url:
+
+-> open chrome browser, postman
+and Put the URL
+
+============================
+
+First API Test:
+
+Send GET request to API Url:
+	https://sandbox.api.service.nhs.uk/hello-world/hello/world
+
+Verify response status code is 200 OK
+Verify Json Response body contains:
+	 "message": "Hello World!"
+
+=====================
+
+Manual Testing:
+	-> We can use Any browser or PostMan
+	-> I use PostMan for Manual testing of RestAPI
+
+	CLIENT is Chrome browser or Postman
+
+	We are sending request using browser or Postman.
+
+API is server, and sending response with status code, json body and some headers.
+
+We verify/assert that status code and json body is as expected.
+
+AUTOMATION:
+
+	Your Java Code with RestAssured: is Client thats is sending REQUEST.
+
+	And API will send back the response.
+
+	Using JUnit , we can assert that status code is 200 and json contains the "message": "Hello World!" message.
+====================================
+
+AWS EC2 server IP address:
+
+IP address that you used for SQL classes.
+
+My EC2 server IP: 52.207.61.129
+
+And you have yours?
+
+below are Mehmet's server IP addresses:
+
+   IP-1 :    44.201.134.164        Group 1 to 6
+   IP-2 :    54.158.153.204        Group 7 to 12
+   IP-3 :    3.84.251.99           Group 13 to 18 and up
+
+If you have your own, please use your own.
+
+
+44.201.134.164:8000
+
+Your_IP_Address:8000
+================================
+
+Postman: Is a tool for API manual testing.
+it can also do API automation.
+
+in Postman:
+	new Request:
+		REQUEST consists of:
+			-> Request Type
+			-> Request URL
+			-> Headers, parameters, body
+
+		RESPONSE:
+			-> Response status code
+			-> Response body(json)
+			-> Response Headers
+
+Automation:
+	RestAssured Library in Java:
+		-> it is used for Rest Api test automation
+		-> It is easy to use and follows BDD design
+
+	maven:
+		https://mvnrepository.com/artifact/io.rest-assured/rest-assured
+
+		<dependency>
+		    <groupId>io.rest-assured</groupId>
+		    <artifactId>rest-assured</artifactId>
+		    <version>4.5.0</version>
+		    <scope>test</scope>
+		</dependency>
+
+	WebSite: https://rest-assured.io
+=========================================
+
+how to send get request using RestAssured?
+
+RestAssured.get(API url);
+
+How to store the response into Response object?
+
+Response response = RestAssured.get(API Endpoint);
+
+----------------------------------
+API url also called API Endpoint
+----------------------------------
+
+How to read status code from response?
+
+Response response = RestAssured.get(API Endpoint);
+
+int statusCode = response.statusCode();
+
+How to print json body of the response?
+
+Response response = RestAssured.get(API Endpoint);
+
+response.prettyPrint();
+====================================
+
+Send get request to API Endpoint:
+	"https://reqres.in/api/users"
+Response status code should be 200
+Response body should contain user info "George"
+
+=====================================
+
+Just like any other testing and automation test case, firstly we learn about the functionality and expected behaviour of application. in this case we firstly learn how API endpoint works, and what is to be returned.
+
+Normally we read the API description from Swagger or any other documentation tool - Confluence, Jira etc
+
+Then test the api manually using postman:
+============================================
+
+Add new class ReqResGetUsersTest
+
+@Test
+public void getAllUsersApiTest() {
+
+}
+===================
+
+response.prettyPrint(); => print response body into console
+
+response.body().asString()
+response.asString() => returns reponse body as String object. And we can use string methods on it.
+Like contains, toUpperCase etc
+
+Assert that response contains "java"
+
+Assertions.assertTrue(response.asString().contains("java"));
+
+===============================
+
+Karina Fomicheva — Today at 3:58 PM
+Do API testers get paid more? Generally yes. it depends though
+
+Send get request to API Endpoint:
+	"https://reqres.in/api/users/5"
+Response status code should be 200
+Response body should contain user info "Charles"
+
+@Test
+public void getSingleUserApiTest() {
+
+}
+
+====================
+
+Positive and negative tests using API:
+
+I do positive and negative tests of rest API.
+WHen I do positive tests, I send request with valid values and parameters and verify response is 200 and json body contains expected data and headers are also as expected
+
+When I do negative testing, i send requests with invalid parameters, and verify/assert that status code is not 200, it is maybe 404,and json body contains error message or its empty.
+
+Send get request to API Endpoint:
+	"https://reqres.in/api/users/50"
+Response status code should be 404
+Response body should contain "{}"
+
+@Test
+public void getSingleUserNegativeApiTest() {
+
+}
+==============================
+
+What are Http request types:
+
+Get -> read
+Post -> add/insert
+Put -> Update
+Delete -> delete
+Patch -> partially update
+
+Status codes:
+	200 -> success
+	300 -> redirect
+	400 -> client error/ error in request
+	500 -> server error/api has error
+
+=========================
+
+Summary:
+	-> What is API
+	-> How API is used
+	-> How to do basic test
+
+	API -> middle layer...
+
+	When we test Rest API:
+		We send request to API url
+		Verify response status code, json body
+
+	-> Postman and Restassured
+=========================================
+

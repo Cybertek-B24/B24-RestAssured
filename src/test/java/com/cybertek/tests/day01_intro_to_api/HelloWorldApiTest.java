@@ -2,6 +2,7 @@ package com.cybertek.tests.day01_intro_to_api;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 public class HelloWorldApiTest {
@@ -14,7 +15,7 @@ public class HelloWorldApiTest {
 
         //print response status code
         System.out.println(response.statusCode());
-
+        Assertions.assertEquals(200, response.statusCode());
         //print response body
         response.prettyPrint();
 
