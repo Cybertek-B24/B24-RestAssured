@@ -1,0 +1,220 @@
+
+01/26/2022 - Wednesday
+
+API Testing Day 02
+
+Tomorrow office hours - Murodil - 4:30 PM EST
+- we will complete that scenario with JDBC
+
+API -> Application Programming Interface
+	-> is an application without UI
+	-> is a code that enables applications and services to comminicate and share data
+	-> is a layer that is between UI and Database of the application
+	-> API is also called Web Service
+===========================================
+
+API -> general meaning:
+JDBC Api, Selenium API, Collections API, String API etc
+
+Any external library/code that we are using in our project and we are using it for handling certain data/and it is acting like a middle helper for us. We also call those libraries APIs.
+
+JDBC Api -> Is a middle helper between our code and Database
+
+Selenium API -> is a middle helper between code and browser
+
+Collections API -> is a middle man between our code and data
+
+String API -> String class -> is a middle helper between our code and characters
+
+Not all APIs are WebServices, But all WebServices are APIs
+----------------------------------------------------------
+
+API - WebService that we send request and get response.
+It is either REST/RESTful API or SOAP API
+
+Communication happens through internet
+
+Irina Lazarenko — Today at 7:24 PM
+Murodil, you said that not all APIs are Webservices....then how can we utilize them?
+APIs that are not Web Service(Rest/Soap) , we just add to our project and create objects from classes and use them. JDBC Api:
+DriverManager.getConnection(....)
+
+===================================
+
+API Testing is based on Request and response.
+
+REQUEST Types:
+	-> Get -> Reading existing data
+	-> Post -> Adding new data
+	-> Put -> Updating existing data + (sometimes)if does not exist, then add new data
+	-> Delete -> delete existing data
+	-> Patch -> Partial update of existing data
+
+STATUS CODES:
+	200 + -> Success/Ok
+	300 + -> Redirect. When you call one APi url it takes redirects to different API Endpoint/URL
+	400 + -> Client error. Error in request part
+	500 + -> Server/API error. Ex: You send get request but it could not read the data and return/maybe database is down etc. MAybe network issue etc, server is down etc
+
+
+REQUEST:
+	-> API URL / Endpoints / Methods / URI: where we send request to:
+		https://reqres.in/api/users
+	-> Headers -> adding info about the request
+	-> Body -> json data to be added
+	-> parameters
+
+RESPONSE:
+	-> status code
+	-> headers
+	-> Response body in Json/xml etc
+
+How do you learn about Rest API Methods/Endpoints and how they work?
+	Documentation:
+		Swagger tool, some documents in Jira, Confluence, Sharepoint
+
+==================================================
+
+When we are testing manually:
+	we use POSTMAN
+
+When doing automation:
+	RestAssured library
+	Apache Client library
+===============================
+
+spartan.url=http://IP_ADDRESS:8000
+
+IP-1 :    44.201.134.164        Group 1 to 6
+IP-2 :    54.158.153.204        Group 7 to 12
+IP-3 :    3.84.251.99           Group 13 to 18
+
+spartan.url=http://54.205.239.177:8000
+
+Every website in internet has SERVER. and that SERVER has IP Address.
+
+We can easily using PING command in command line to find out the IP address of the website. Also to see if our computer is able to comminicate with that server
+
+ping www.google.com
+
+64 bytes from 142.250.65.68: icmp_seq=0 ttl=118 time=3.865 ms
+
+142.250.65.68 is IP address of google server
+
+Furkan Cakin — Today at 7:59 PM
+I still did not get why are we calling the API business layer of the application
+- Because all processing is done by API, UI is just interface for users and database is just data storage.
+All hard work processing is done by API. Those processes with rules are called Business Rules/Layer / Service layer
+
+Another way of calling application layers:
+          BACKEND
+UI -> API -> Database
+
+Presentation layer -> Service/Business layer -> Data layer
+============================================================
+
+• When I send a GET request to
+• spartan_base_url/api/spartans
+• Then Response STATUS CODE must be 200
+• And I Should see all Spartans data in JSON format
+
+SWAGGER UI:
+	-It is a tool that is used for documentation of Rest API.
+	-We can see baseUrl and all available endpoints of API
+	-We can see Http Method type that works with endpoint(Get, Post, Put, delete etc)
+	-We can see description of request and types of responses that we can get
+	-We can also try out the API request and see the response
+	-Very useful tool that we will be using in our job
+
+package day02_headers_params
+SpartanGetRequestsApiTest
+
+
+• When I send a GET request to
+• spartan_base_url/api/spartans
+• Then Response STATUS CODE must be 200
+• And I Should see all Spartans data in JSON format
+
+ Postman and send new GET request to spartan_base_url/api/spartans
+
+Taha Belli — Today at 8:51 PM
+so you mean api request and html requests are different ? @Murodil
+
+Both of them work as Request and Response.
+If url is pointing to webpage, then response will be HTML
+
+If url is pointing to Rest API Url, then response is Json/Xml
+============================
+
+
+Vindar Tahir — Today at 9:03 PM
+Murodil, difference between response.statusCode and response.getStatusCode ?
+
+They do same . return status code number
+
+====================================
+
+HEADERS in REST API:
+
+headers provide additional information about request or response.
+
+Ex:
+	AcceptType -> Application/json
+		Accept Type -> used in request, it means client would like json type of response
+	AcceptType -> Application/xml
+
+	Content Type -> Application/json or Application/xml
+		-> I am sending json or xml data
+
+We can also include credentials, authorization tokens etc
+
+------------------------------------------
+Sedat Berk — Today at 9:26 PM
+@Murodil we use testNG j-unit and jupiter  for assertion and as i remember parallel test its not working for scenario outline with j-unit so how we can parallel testing  or which one we can say for parallel testing can you please explain it?
+
+Driver singleton
+
+------------------------------------------
+Given Accept type is "application/json"
+When I send a GET request to
+spartan_base_url/api/spartans
+Then Response STATUS CODE must be 200
+And content type should be "application/json"
+
+JSON -> javaScript Object notation.
+	popular data type in Rest API.
+	It is based on key+value format
+	{
+        "id": 24,
+        "name": "Correy",
+        "gender": "Female",
+        "phone": 7823876013
+    }
+
+XML -> Extensible Markup Language. Data type that used <tags> similar to html
+
+<item>
+    <id>24</id>
+    <name>Correy</name>
+    <gender>Female</gender>
+    <phone>7823876013</phone>
+</item>
+==============================
+
+@Test
+public void allSpartansHeadersTest() {
+
+}
+
+given().accept(ContentType.JSON) ==> this means, we are adding request header accept="application/json"
+
+ContentType.JSON ==> "application/json"
+
+Verify content type in response:
+  assertEquals("application/json", response.contentType());
+
+Verify Date header is present:
+  assertTrue(response.getHeaders().hasHeaderWithName("Date"));
+
+Print value of Date header:
+ System.out.println("date header value = " + response.getHeader("Date"));
