@@ -1,0 +1,184 @@
+
+01/27/2022
+----------
+
+API Day 03
+
+Yesterday : headers in request and response.
+
+- provide additional information about request and response.
+- when we do api testing, we pass headers in request and also verify headers of response as well
+-> they are key+value format like a map in java
+-> headers are used to specify content type, accept type
+, also credentials, authorization information etc
+
+
+REQUEST:
+	Accept -> Application/json -> Hey API, I need Json response
+
+	Accept -> Application/xml -> Hey API, I need XML response
+
+RESPONSE:
+	Content-type -> Application/json -> Hey client, i am sending JSON data to you. The response body in json format
+
+	Content-type -> Application/xml => Hey client, i am sending XML data to you. The response body in XML format
+
+	-> we can have many more headers in response. like Date, char-limit, etc
+
+
+When I do API testing I send request to API endpoint along with headers. and Validate the API response status code , headers, json body
+
+==============================
+
+PARAMETERS in Rest API:
+
+2 types of parameters we can pass to Rest API endpoint:
+	1) path parameter -> also called URL parameter. The value is part of url:
+		spartan_url/api/spartans/44
+		https://library.com/api/books/2345
+
+	The numbers at the end of above URLs are path parameters, and we can change to different values
+
+	2) Query parameter
+	It is not part of URL, it is passed as KEY+VALUE after URL.
+	spartanBaseURL/api/spartans/search?nameContains=Tester
+
+	spartanBaseURL/api/spartans/search?nameContains=Tester & gender=female
+
+	? -> means that it is end of URL. everything after that is query parameters
+
+
+https://www.google.com/search?q=java&oq=java&aqs=chrome
+
+
+https://www.google.com/search?q=java&client=safari
+
+https://www.amazon.com/s?
+k=java&crid=BPDKW568XICU&sprefix=java%2Caps%2C91&ref=nb_sb_noss_1
+
+https://www.etsy.com/search?q=java
+
+https://www.etsy.com/search?q=spoon
+
+ENDPOINT: https://www.etsy.com/search
+QUERY PARAM: q=spoon
+==========================================
+
+Given Accept type is json
+And path parameter id is 24
+When I send request to /api/spartans/24
+Then status code should be 200
+And content type should be "application/json"
+and json body should contain "Correy"
+
+API documentation -> Swagger UI. Some documents in Jira, Confluence.
+
+If no documentation or you want to see which API is called when you do actions in UI/Front end, we open Developer tools in chrome and goto network tab to see all backend calls/requests and responses.
+
+Global Variable in Postman:
+	We can save global variables with values in postman and can use those variable in any request in any collection.
+
+	These variable are accessible for every request in Postman.
+
+	To read value from variable, we use {{var_name}}
+
+{{spartan_base_url}}/api/spartans/24
+=======================================
+BASE URL in RESTASSURED:
+
+In RestAssured as well, there is a static variable RestAssured.baseUri = http://54.205.239.177:8000
+
+If we set value to baseUri variable , then we do not have to type whole url in get method:
+
+RestAssured.get("/api/spartans")
+
+add new package:
+	day03_api_parameters
+
+SpartanWithApiParamsTest
+
+@Test
+public void getSpartanPathParamTest() {
+
+}
+=============================================
+
+
+Given Accept type is json
+And path parameter id is 1000
+When I send request to /api/spartans/1000
+Then status code should be 404
+And content type should be "application/json"
+and json body should contain "Not Found"
+---------
+{
+  "timestamp": "2022-01-28T01:33:50.800+00:00",
+  "status": 404,
+  "error": "Not Found",
+  "message": "",
+  "path": "/api/spartans/1000"
+}
+
+
+API Call -> sending API Request
+
+Positive API Test: send request with valid parameters and headers to API Url. Verify status code 200 , headers and json body is as expected
+
+Negative API Test: send request to API Enpoint/URL with invalid parameters/headers and verify status code is not 200 , it is 404, and json body contains error message
+
+@Test
+public void getSpartanPathParamNegativeTest() {
+
+}
+
+STATUS CODE: 404 - not found. it is a client error. happens when we request non existing data.
+
+Valentina Grinchuk — Today at 8:58 PM
+@Murodil , so we always have to do it manually first to see expected etc?
+
+Furkan Cakin — Today at 8:58 PM
+why do we have to do postman too if we are checking the documenattion
+
+Yes, we always learn how API works in Swagger and test manually if it is passing manually as expected. then Automate it using RestAssured.
+
+Similar QA process like UI.
+
+=================================
+
+
+{{spartan_base_url}}/api/spartans/search
+
+Search API method in Spartan Rest API, accepts query parameters.
+
+nameContains and gender
+
+{{spartan_base_url}}/api/spartans/search?nameContains=J
+
+{{spartan_base_url}}/api/spartans/search?nameContains=J&gender=Female
+
+SELECT * FROM spartans
+WHERE name LIKE '%J%'
+
+https://www.etsy.com/search?q=iphone
+
+Query params are passes as Key+Value after the URL.
+
+{{spartan_base_url}}/api/spartans/search?nameContains=J
+
+https://www.youtube.com/results?search_query=rest+assured+api+automation+framework
+
+https://www.youtube.com/results?search_query=java+interview
+
+Given accept type is Json
+        And query parameter values are:
+        gender|Female
+        nameContains|e
+        When user sends GET request to /api/spartans/search
+        Then response status code should be 200
+        And response content-type: application/json
+        And "Female" should be in response body
+        And "Janette" should be in response body
+
+54.205.239.177 -> its own database with values
+
+77.433.222.177 -> its own database with values
