@@ -1,0 +1,356 @@
+
+01/29/2022
+----------
+
+Rest API Automation Day 4
+-------------------------
+
+API Office hours: Thursdays -> Oscar
+				: Tuesday -> Murodil
+
+REST API -> Representational State of Transfer
+		 -> Application Programming Interface
+
+REST API provides communication between Different applications or communication between different layers of same application
+
+Send request to each API Endpoint and verify the response is matching the expected.
+
+Send request to API Endpoint => Making a CALL to API Endpoint
+
+REQUEST:
+		-> GET/POST/PUT/DELETE -> API Endpoints/Urls/Method
+		-> Headers (accept type, content type, credentials)
+		-> parameters (URL params, Query params(key+value))
+		-> JSON body (Post, Put)
+
+RESPONSE:
+		-> status code (200+, 300+, 400+, 500+)
+		-> Headers
+		-> JSON body
+
+API Endpoints IS URL of REST Api where send request to:
+{{spartan_base_url}}/api/spartans/55
+
+Spring Framework is for java development
+==========================================
+
+SQL -> HR database.
+	Tables: Employees, Departments, Regions, Countries, Jobs, Locations, Job history
+
+
+API -> ORDS -> Oracle Rest Data service
+	We can work with HR data using Rest API as well.
+	It is already installed in our servers
+
+
+new package day04_ords_path
+
+ords.url=http://IP_ADDRESS:1000/ords/hr
+
+ords.url = http://54.205.239.177:1000/ords/hr
+
+IP Address is same as Spartan IP Address
+
+API
+http://54.205.239.177:1000/ords/hr/employees
+
+SQL:
+SELECT * FROM employees;
+
+The above statements will return data for all employees using API and SQL query
+
+=================================================
+
+EC machine:
+	Port numbers:
+		8000 -> Spartan
+		1000 -> ORDS Api
+		1521 -> HR database
+		8081 -> Jenkins CI
+
+TEST CASE:
+	Test Manually -> Postman
+	Automation -> RestAssured
+
+Other Popular API automation tools:
+	-> SOAPUi
+
+====================================
+
+user should be able to see all regions when sending GET request to /ords/hr/regions
+
+Given accept type is json
+When user send get request to /ords/hr/regions
+Status code should be 200
+Content type should be "application/json"
+And body should contain "Europe"
+
+MANUALLY: POSTMAN:
+	Save the request
+
+AUTOMATION: RestAssured library in Java
+
+
+new package day04_ords_path
+
+ords.url=http://IP_ADDRESS:1000/ords/hr
+
+static imports for RestAssured and Assertions
+
+class ORDSGetRequestsTest
+
+@BeforeAll
+public static void setUp() {
+	baseURI = ConfigurationReader.getProperty("ords.url");
+}
+
+@Test
+public void getAllRegionsTest() {
+
+}
+======================================
+
+Given accept type is json
+And Path param value is 1
+When user send get request to /ords/hr/regions/{region_id}
+Status code should be 200
+Content type should be "application/json"
+And body should contain "Europe"
+
+@DisplayName("GET Request to /ords/hr/regions/1")
+@Test
+public void getSingleRegionsWithParam() {
+
+}
+===========================================
+
+Given accept type is json
+And query param q="{"region_name": "Americas"}"
+When user send get request to /ords/hr/regions
+Status code should be 200
+Content type should be "application/json"
+And region name should be "Americas"
+And region id should be "2"
+
+http://54.205.239.177:1000/ords/hr/regions?q={"region_id": 1}
+
+SELECT * FROM regions
+WHERE region_id = 1;
+
+@DisplayName("GET Request to /ords/hr/regions with query param")
+@Test
+public void getRegionWithQueryParam() {
+
+}
+
+===========================================
+
+READING JSON RESPONSE BODY.
+
+So far, we just printed the json response body and did some assertions using contains String method.
+
+But it is not the most effiecient way. There are better ways to work with json response and validate them.
+
+Lets take below json as an example
+{
+    "id": 196,
+    "name": "Mike",
+    "gender": "Male",
+    "phone": 8877445596
+}
+
+We did way:
+	assertTrue(response.asString().contains("Mike"));
+We just asserted that "Mike" is anywhere in the json.
+
+Issue with that, we are Not exactly verifying that "name" value equals "Mike".
+----------------------
+
+So there are several other ways to verify JSON body:
+
+1) path() method
+2) jsonPath object
+3) convert json to java collections
+4) convert json to java custom POJO class
+
+----------------------
+
+Path method is part of RestAssured response object.
+
+{
+    "id": 196,
+    "name": "Mike",
+    "gender": "Male",
+    "phone": 8877445596
+}
+
+System.out.println(response.path("name")); //Mike
+
+System.out.println(response.path("id")); //196
+
+System.out.println(response.path("gender")); //Male
+
+System.out.println(response.path("phone")); //8877445596
+=========================================
+
+SpartanTestBase in Tests package
+
+@BeforeAll
+public static void setUp() {
+    System.out.println("Set up method: assigning value to baseURI variable");
+    baseURI = ConfigurationReader.getProperty("spartan.url");
+}
+
+SpartanTestBase :
+	- will be parent class for SpartanApiTests, we extend this class
+	- it is setting up baseURI and we do not have to do that in the test classes
+	- any we can store reusable methods or variables in TestBase
+=================================
+
+Given accept is json
+And path param id is 13
+When I send get request to /api/spartans/{id}
+Then status code is 200
+And content type is json
+And id value is 13
+And name is "Jaimie"
+And gender is "Female"
+And phone is "7842554879"
+
+{
+    "id": 13,
+    "name": "Jaimie",
+    "gender": "Female",
+    "phone": 7842554879
+}
+
+public class GetSpartanUsingPath extends SpartanTestBase {
+    @Test
+
+}
+--------------------------------
+
+[
+    {
+        "id": 12,
+        "name": "wooden",
+        "gender": "Male",
+        "phone": 9119119111
+    },
+    {
+        "id": 13,
+        "name": "Jaimie",
+        "gender": "Female",
+        "phone": 7842554879
+    }
+]
+
+In Above example, we need go by index.
+[] -> Json array object.  Json list. it means multiple items with {}.
+[
+	{}, //0
+	{}, //1
+	{} // 2
+]
+
+Print first spartan id:
+System.out.println(response.path("[0].id")); 12
+System.out.println(response.path("[1].id")); 13
+
+----------------------------
+
+
+COLLECTIONS/DATA STRUCTURE -> one or more items in same object.
+	-> Arrays. but not part of collections framework like below
+	-> Collections framework (List, Set, Map etc ....)
+	-> also called data structure. is just structuring data to manage easily
+
+----------------------------
+
+/**
+Given accept is json
+When I send get request to /api/spartans
+Then status code is 200
+And content type is json
+And I can navigate json array object
+*/
+
+@Test
+public void readJsonArrayTest() {
+
+}
+
+
+System.out.println(response.path("[2].id").toString());
+
+System.out.println(response.path("id[2]").toString());
+
+both ways print id of third person.
+
+Difference:
+[2].id -> goto third person > then read id
+
+id[2] -> collect all ids in to a list > then read third id
+=============================
+
+[
+	{
+		"make" , "Toyota",
+		"model" , "Camry"
+	},
+	{
+		"make" , "Lexus",
+		"model" , "Rx350"
+	}
+]
+
+First car info as Json:
+	System.out.println(response.path("[0]").toString());
+	=> {"make" , "Toyota","model" , "Camry"}
+
+First car Make:
+	System.out.println(response.path("[0].make").toString());
+	System.out.println(response.path("make[0]").toString());
+	=> Toyota
+
+Print second car model:
+	System.out.println(response.path("[1].model").toString());
+	System.out.println(response.path("model[1]").toString());
+	=> Rx350
+
+Print all makes:
+	System.out.println(response.path("make").toString());
+	=> Toyota, Lexus
+
+Print all models:
+	System.out.println(response.path("model").toString());
+	=> Camry, Rx350
+
+List<String> makes = response.path("make");
+
+for(String each : makes) {
+	System.out.println(each)
+}
+==================
+{
+	"myCars":[
+				{
+					"make" , "Toyota",
+					"model" , "Camry"
+				},
+				{
+					"make" , "Lexus",
+					"model" , "Rx350"
+				}
+			]
+}
+
+Make of first car:
+	System.out.println(response.path("myCars[0].make").toString());
+	=> Toyota
+
+Model of first car:
+	System.out.println(response.path("myCars[0].model").toString());
+	=> Camry
+
+==========================================
