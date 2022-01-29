@@ -56,7 +56,24 @@ public class ORDSGetRequestsTest {
     @DisplayName("GET Request to /ords/hr/regions/1")
     @Test
     public void getSingleRegionsWithParam() {
-        //BREAK TILL 12:18 PM EST
+
+        int regionId = 1;
+
+        Response response = given().accept(ContentType.JSON)
+                .and().pathParam("id", regionId)
+                .when().get("/regions/{id}");
+        //.when().get("/regions/" + regionId); .when().get("/regions/1");
+
+        System.out.println("status code = " + response.statusCode());
+        assertEquals(200 , response.statusCode());
+
+        System.out.println("content type = " + response.contentType());
+        assertEquals("application/json", response.contentType());
+
+        response.prettyPrint();
+        assertTrue(response.asString().contains("Europe"));
+
+
     }
 
 }
