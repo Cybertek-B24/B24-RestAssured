@@ -76,4 +76,33 @@ public class ORDSGetRequestsTest {
 
     }
 
+    /**
+     * Given accept type is json
+     * And query param q={"region_name": "Americas"}
+     * When user send get request to /ords/hr/regions
+     * Status code should be 200
+     * Content type should be "application/json"
+     * And region name should be "Americas"
+     * And region id should be "2"
+     */
+
+    @DisplayName("GET Request to /ords/hr/regions with query param")
+    @Test
+    public void getRegionWithQueryParam() {
+        Response response = given().accept(ContentType.JSON)
+                .and().queryParam("q" , "{\"region_name\": \"Americas\"}")
+                .when().get("regions");
+
+        System.out.println("status code = " + response.statusCode());
+        assertEquals(200, response.statusCode());
+
+        System.out.println("content type = " + response.contentType());
+        assertEquals("application/json" , response.contentType());
+
+        response.prettyPrint();
+        assertTrue(response.asString().contains("Americas"));
+        assertTrue(response.asString().contains("2"));
+    }
+
+
 }
