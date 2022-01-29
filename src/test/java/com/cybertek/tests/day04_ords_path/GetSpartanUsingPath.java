@@ -6,6 +6,8 @@ import io.restassured.response.Response;
 
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static io.restassured.RestAssured.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -95,8 +97,33 @@ public class GetSpartanUsingPath extends SpartanTestBase {
 
         System.out.println("name of second person = " + response.path("[1].name"));
 
+        //PRINT third person's id, name, gender, phone
 
+        System.out.println("THIRD PERSON INFO");
+        System.out.println(response.path("[2].id").toString());
+        System.out.println(response.path("[2].name").toString());
+        System.out.println(response.path("[2].gender").toString());
+        System.out.println(response.path("[2].phone").toString());
+        System.out.println("------------------------");
+        System.out.println(response.path("id[2]").toString());
 
+        System.out.println(response.path("[2]").toString());
+
+        //PRINT LAST PERSON INFO
+        System.out.println("LAST PERSON INFO --");
+        System.out.println(response.path("id[-1]").toString());
+        System.out.println(response.path("name[-1]").toString());
+        System.out.println(response.path("gender[-1]").toString());
+        System.out.println(response.path("phone[-1]").toString());
+
+        //Store all first names into a List:
+        List<String> allNames = response.path("name");
+        System.out.println("names count = " + allNames.size());
+        for(String eachName : allNames ) {
+            System.out.println(eachName);
+        }
+
+        System.out.println(allNames.contains("Wooden Tester"));
     }
 
 }
