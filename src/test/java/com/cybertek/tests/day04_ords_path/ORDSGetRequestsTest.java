@@ -45,4 +45,18 @@ public class ORDSGetRequestsTest {
 
     }
 
+    /**
+     * Given accept type is json
+    And Path param value is 1
+    When user send get request to /ords/hr/regions/{region_id}
+    Status code should be 200
+    Content type should be "application/json"
+    And body should contain "Europe"
+    */
+    @DisplayName("GET Request to /ords/hr/regions/1")
+    @Test
+    public void getSingleRegionsWithParam() {
+        //BREAK TILL 12:18 PM EST
+    }
+
 }
