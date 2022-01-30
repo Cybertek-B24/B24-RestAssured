@@ -1,0 +1,186 @@
+
+01/30/2022 - Sunday - Long day
+-------------------------------
+
+API class Day 5
+
+Yesterday:
+	-> Parameters:
+		1) URL/Path parameter - value if part of URL
+		2) Query Paramater - we pass values in Key+Value format
+
+	-> Parsing/Reading Json response body -> Reading json in organized manner.
+		-> path method
+		-> jsonPath
+		-> Deserialization -> Convert json to java collection
+		-> Deserialization -> convert json to java pojo custom class
+
+-> path practice with ORDS HR Api
+-> jsonPath
+
+Add new package day05_jsonpath
+
+ORDSTestBase -> in tests package. not in day05 package
+	@BeforeAll
+    public static void setUp() {
+        System.out.println("Set up method: assigning value to baseURI variable");
+        baseURI = ConfigurationReader.getProperty("ords.url");
+    }
+
+
+get all employees who work as IT_PROG
+
+SQL:
+	SELECT * FROM employees
+	WHERE job_id = 'IT_PROG';
+
+	=> result in table format
+
+API:
+	IP/ords/hr/employees? q={"job_id":"IT_PROG"}
+
+	=> result in json format
+
+Add new package day05_jsonpath
+new class ORDSGetEmployeesPathTest extends ORDSTestBase
+
+@Test
+public void getAllITProgrammersTest() {
+
+}
+===========================================
+
+QUERY PARAMS - are params that are passed in Key + value format after the API URL
+	-> purpose is to filter the result and see only matching data with the query param
+REST-ASSURED:
+	-> we can use queryParam("paramName","paramvalue")
+	OR
+	-> we can also pass query parameter using a map object.
+
+2 steps:
+	1) declare new hashmap
+		Map<String, String> paramMap = new HashMap<>();
+
+	2) add values to the map using put method
+
+	Map<String, String> paramMap = new HashMap<>();
+	paramMap.put("nameContains", "A");
+	paramMap.put("gender", "Male");
+
+	Response response = given().accept(ContentType.JSON)
+	.and().queryParams(paramMap)
+	.when().get("api/spartans/search");
+
+Request URL will be built like this:
+	http://base_url/api/spartans/search?nameContains=A & gender=Male
+==================================================
+
+
+{
+    "employee_id": 103,
+    "first_name": "Alexander",
+    "last_name": "Hunold",
+    "email": "AHUNOLD",
+    "phone_number": "590.423.4567",
+    "hire_date": "2006-01-03T00:00:00Z",
+    "job_id": "IT_PROG",
+    "salary": 9000,
+    "commission_pct": null,
+    "manager_id": 102,
+    "department_id": 60,
+}
+
+1) Path method:
+
+	int empID = response.path("employee_id") ==> 103
+	String firstName = response.path("first_name"); => Alexander
+
+2) JsonPath:
+	-> it is another way to read the json reponse
+	-> similar to path method
+	-> first we assign jsonPath object using jsonPath() method of response
+	-> then we call methods like getString, getInt, getList etc with the locator
+
+	JsonPath json = response.jsonPath();
+	System.out.println("emp id = " + json.getInt("employee_id"));
+	System.out.println("email = " + json.getString("email"));
+
+==================================================================
+
+/**
+Given accept is json
+when I send get request to ords/hr/employees/103
+Then status code is 200
+and content type header is json
+and employee_id is 103
+and first_name is Alexander
+and last_name is Hunold
+and salary is 9000
+*/
+
+ORDSGetRequestWithJsonPathTest extends ORDSTestBase
+
+@DisplayName("GET ords/hr/employees/103 and jsonPath")
+@Test
+public void jsonPathSingleEmpInfoTest() {
+
+}
+
+//assign json response body to JsonPath object
+JsonPath json = response.jsonPath();
+
+We are converting response body to JsonPath object.
+Why? So that we can read values from json easily and verify them.
+
+Could we do that already with path() method?
+
+Yes, we could. and JsonPath is another way of doing the same thing.
+Also jsonpath has even more capabilities.
+
+Whole purpose is to read values from json response body then verify them. it is part of API testing where you verify response status code, headers, and response json body.
+
+In order to verify response json body, we need to read values from it then we can verify right?
+
+As we saw, we can do that(reading json) in different ways:
+	#1) using path method
+	#2) using JsonPath object
+	#3) using java collections
+	#4) using Pojo java class
+======================================================
+
+
+{
+    "id": 1,
+    "name": "Leanne Graham",
+    "username": "Bret",
+    "email": "Sincere@april.biz",
+    "address": {
+        "street": "Kulas Light",
+        "suite": "Apt. 556",
+        "city": "Gwenborough",
+        "zipcode": "92998-3874",
+        "geo": {
+            "lat": "-37.3159",
+            "lng": "81.1496"
+        }
+    },
+    "phone": "1-770-736-8031 x56442",
+    "website": "hildegard.org",
+    "company": {
+        "name": "Romaguera-Crona",
+        "catchPhrase": "Multi-layered client-server neural-net",
+        "bs": "harness real-time e-markets"
+    }
+}
+
+JsonPath json = response.jsonPath();
+
+String userName = json.getString("username");
+
+String city = json.getString("address.city");
+
+String zipCode = json.getString("address.zipcode");
+
+String lat = json.getString("address.geo.lat");
+=================================================
+
