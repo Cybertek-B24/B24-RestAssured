@@ -36,6 +36,12 @@ public class TypicodeInterviewTest {
         assertEquals("Gwenborough" , json.getString("address.city"));
 
         //print company name
+        String companyName = json.getString("company.name");
+        System.out.println("companyName = " + companyName);
+
+        String lng = json.getString("address.geo.lng");
+        System.out.println("lng = " + lng);
+        
     }
 
 }
