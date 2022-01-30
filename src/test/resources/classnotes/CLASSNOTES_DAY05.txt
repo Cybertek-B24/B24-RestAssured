@@ -255,23 +255,53 @@ read all employees who are male. Filtering results using jsonPath
 
 List<String> names = json.getList("items.findAll {it.gender="Male"}.name");
 
-BREAK TILL 4:14 PM EST
+=============================================
+
+REQUEST:
+	-> GET, POST, PUT, DELETE, PATCH to API Endpont/Url
+	-> Headers (accept type, content type , credentials etc)
+	-> Params (path params, query params)
+	-> Json body (Post, Put)
+
+RESPONSE:
+	-> Status code
+	-> Headers
+	-> Json body
+
+	POSITIVE / SUNNY:
+		REQUEST:
+			Valid params, valid headers, valid json body
+
+		RESPONSE:
+			200 Ok, headers, json body as expected
 
 
+	NEGATIVE / RAINY DAY:
+		REQUEST:
+			InValid params, invalid headers, invalid json body(post, put)
+
+		RESPONSE:
+			NOT 200 Ok (404, 401, 403, 500), json body should have error msg or empty
+
+=======================================================================
 
 
+READ/VERIFY RESPONSE JSON BODY:
+	-> path method of response
+	-> jsonPath
+	-> Deserialization from Json to Java collections
+	-> Deserialization from Json to java custom classes
 
+-> Deserialization from Json to Java collections
 
+Single spartan: /api/spartans/55
 
+Map<String, Object> spartanMap  = response.body().as(Map.class);
 
+spartanMap will have values from json
 
+Deserialization => JSON => Java object
 
+Serialization => Java object ==> JSON
 
-
-
-
-
-
-
-
-
+====================================================
