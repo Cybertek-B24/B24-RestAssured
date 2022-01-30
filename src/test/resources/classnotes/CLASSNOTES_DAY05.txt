@@ -184,3 +184,94 @@ String zipCode = json.getString("address.zipcode");
 String lat = json.getString("address.geo.lat");
 =================================================
 
+
+Saturday -> Tysons Corner campus -> lunch break time and stay here.
+
+DMV area ->
+
+Anna Sokolovka -> reach out > inform
+
+Order lunchh
+Dessert
+ -> no covid symptoms / no covid
+====================================
+
+add new class TypicodeInterviewTest
+
+@BeforeAll
+public void setUp() {
+	baseURI = "https://jsonplaceholder.typicode.com";
+}
+
+@Test
+public void getUserTest() {
+
+}
+================================
+
+JsonPath -> I use jsonPath to read json response body and extract values for verification.
+
+We saw examples already.
+
+
+JsonPath json = response.jsonPath();
+
+String userName = json.getString("username");
+
+String city = json.getString("address.city");
+
+The above examples are for reading single values.
+
+Lets say you have json with array. and you want to read only the ones that match your filter.
+
+EX:
+
+{
+    "items": [
+        {
+	        "id": 15,
+	        "name": "Meta",
+	        "gender": "Female",
+	        "phone": 1938695106
+	    },
+	    {
+	        "id": 16,
+	        "name": "Sinclair",
+	        "gender": "Male",
+	        "phone": 9714460354
+	    },
+	    {
+	        "id": 17,
+	        "name": "Wash",
+	        "gender": "Male",
+	        "phone": 4978976378
+	    }
+    ]
+}
+
+JsonPath json = response.jsonPath();
+
+read all employees who are male. Filtering results using jsonPath
+
+List<String> names = json.getList("items.findAll {it.gender="Male"}.name");
+
+BREAK TILL 4:14 PM EST
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
