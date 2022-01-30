@@ -6,6 +6,7 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.*;
@@ -27,6 +28,25 @@ public class ORDSGetEmployeesPathTest extends ORDSTestBase {
 
         System.out.println("Status code = " + response.statusCode());
         response.prettyPrint();
+
+        //print first emloyees emp id, first name, last name, email
+        System.out.println("first emp id = " + response.path("items[0].employee_id"));
+        System.out.println("first emp firstname = " + response.path("items[0].first_name"));
+        System.out.println("first emp lastname = " + response.path("items[0].last_name"));
+        System.out.println("first emp email = " + response.path("items[0].email"));
+
+        //you want to email all IT_PROGs, save all emails into List of string
+        List<String> allEmails = response.path("items.email");
+        System.out.println("count = " + allEmails.size());
+        System.out.println("allEmails = " + allEmails);
+        
+        //you want to text all IT_PROGs, save all phones into List of String
+        List<String> allPhones = response.path("items.phone_number");
+        System.out.println("allPhones = " + allPhones);
+
+        //verify that 590.423.4568 is among phone numbers
+        assertTrue(allPhones.contains("590.423.4568"));
+
     }
 
 }
