@@ -51,6 +51,49 @@ public class PetStoreGetRequestsTest {
         assertTrue(json.getInt("available") >= 500);
 
         response.prettyPrint();
+    }
+
+    /**
+     * accept type is json
+     * order id is 2
+     * get request to store/order/2
+     * Then status code is 200
+     * And content type is json
+     * id is 2
+     * pet id is 20
+     * status is "placed"
+     * complete is true
+     * */
+
+    @Test
+    public void getOrderPathParamTest() {
+        Response response = given().accept(ContentType.JSON)
+                .and().pathParam("orderId" , 2)
+                .when().get("/store/order/{orderId}");
+                //.when().get("/store/order/2");
+
+        System.out.println("status code = " + response.statusCode());
+        assertEquals(HttpStatus.SC_OK, response.statusCode());
+
+        assertEquals("application/json" , response.contentType());
+
+        JsonPath json = response.jsonPath();
+
+        int orderId = json.getInt("id");
+        int petId = json.getInt("petId");
+        String status = json.getString("status");
+        boolean complete = json.getBoolean("complete");
+
+        System.out.println("orderId = " + orderId);
+        System.out.println("petId = " + petId);
+        System.out.println("status = " + status);
+        System.out.println("complete = " + complete);
+
+        assertEquals(2 , orderId);
+        assertEquals(20 , petId);
+        assertEquals("placed" , status);
+        assertEquals(Boolean.TRUE, complete);
+
 
     }
 
