@@ -1,6 +1,7 @@
 package com.cybertek.tests.office_hours;
 
 import io.restassured.http.ContentType;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.BeforeAll;
@@ -39,6 +40,17 @@ public class PetStoreGetRequestsTest {
         assertEquals("application/json", response.contentType());
         assertTrue(response.getHeaders().hasHeaderWithName("Date"));
 
+        //path, jsonPath
+        JsonPath json = response.jsonPath();
+
+        //print available count
+        System.out.println("available = " + json.getInt("available"));
+
+        //available is more than 500
+        assertEquals(Boolean.TRUE, json.getInt("available") >= 500);
+        assertTrue(json.getInt("available") >= 500);
+
+        response.prettyPrint();
 
     }
 
