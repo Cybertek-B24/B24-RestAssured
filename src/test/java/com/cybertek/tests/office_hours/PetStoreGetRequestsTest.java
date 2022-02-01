@@ -10,6 +10,10 @@ import static io.restassured.RestAssured.*;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class PetStoreGetRequestsTest {
 
     @BeforeAll
@@ -93,7 +97,43 @@ public class PetStoreGetRequestsTest {
         assertEquals(20 , petId);
         assertEquals("placed" , status);
         assertEquals(Boolean.TRUE, complete);
+    }
 
+    /**
+     * accept type is json
+     * query param status is "available"
+     * get request to /pet/findByStatus
+     * Then status code is 200
+     * And content type is json
+     * And see all pet names
+     * And all status values should be "available"
+     * */
+
+    @Test
+    public void searchPetsByStatusTest() {
+
+        Map<String, String> paramMap = new HashMap<>();
+        paramMap.put("status" , "available");
+
+        Response response = given().accept(ContentType.JSON)
+                .and().queryParam("status" , "available")
+                .when().get("/pet/findByStatus");
+        //.and().queryParams(paramMap)
+
+        System.out.println("status code = " + response.statusCode());
+        assertEquals(HttpStatus.SC_OK, response.statusCode());
+
+        assertEquals("application/json", response.contentType());
+        JsonPath json = response.jsonPath();
+        
+        List<String> allNames = json.getList("name");
+        System.out.println("allNames = " + allNames);
+        System.out.println("count = " + allNames.size());
+
+        List<String> allStatus = json.getList("status");
+        System.out.println("allStatus = " + allStatus);
+
+        //verify all are available
 
     }
 
