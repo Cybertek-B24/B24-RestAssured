@@ -121,6 +121,7 @@ public class PetStoreGetRequestsTest {
         //.and().queryParams(paramMap)
 
         System.out.println("status code = " + response.statusCode());
+        //HttpStatus.SC_OK ==> 200
         assertEquals(HttpStatus.SC_OK, response.statusCode());
 
         assertEquals("application/json", response.contentType());
@@ -141,5 +142,4 @@ public class PetStoreGetRequestsTest {
         allStatus.forEach(eachStatus -> assertEquals("available",eachStatus));
 
     }
-
 }
