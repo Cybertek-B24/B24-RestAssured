@@ -134,6 +134,11 @@ public class PetStoreGetRequestsTest {
         System.out.println("allStatus = " + allStatus);
 
         //verify all are available
+        for (String eachStatus : allStatus) {
+            assertEquals("available" , eachStatus);
+        }
+
+        allStatus.forEach(eachStatus -> assertEquals("available",eachStatus));
 
     }
 
