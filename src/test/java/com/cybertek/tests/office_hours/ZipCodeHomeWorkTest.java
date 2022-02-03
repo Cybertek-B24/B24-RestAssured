@@ -6,6 +6,9 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+import java.util.Map;
+
 import static io.restassured.RestAssured.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -77,6 +80,47 @@ public class ZipCodeHomeWorkTest {
         //latitude is 38.8604
         System.out.println("latitude = " + json.getString("places[0].latitude"));
         assertEquals("38.8604" , json.getString("places[0].latitude"));
+    }
+
+    @Test
+    public void zipcodeJsonToMapTest() {
+        Response response = given().accept(ContentType.JSON)
+                .and().pathParam("postal-code" , 22031)
+                .when().get("/us/{postal-code}");
+        
+        //DESERIALIZATION Json > Map using Jackson/Gson parser library
+        Map<String, Object> jsonMap = response.body().as(Map.class);
+        //jsonMap.put("post code" , "22031");
+
+        System.out.println("jsonMap = " + jsonMap);
+
+        System.out.println("post code = " + jsonMap.get("post code"));
+        assertEquals("22031" ,  jsonMap.get("post code"));
+
+        System.out.println("country = " + jsonMap.get("country"));
+        assertEquals("United States" , jsonMap.get("country"));
+
+        System.out.println("country abbreviation = " + jsonMap.get("country abbreviation"));
+        assertEquals("US" , jsonMap.get("country abbreviation"));
+
+        System.out.println("place info = " + jsonMap.get("places"));
+
+        List<Map<String, Object>> placeMapList = (List<Map<String, Object>>) jsonMap.get("places");
+        System.out.println(placeMapList.get(0)); //print map object
+        //print placename
+        System.out.println("place name = " + placeMapList.get(0).get("place name"));
+
+        //assign the map inside the list into a separate map
+        Map<String, Object> placeMap = placeMapList.get(0);
+        System.out.println("place name = " + placeMap.get("place name"));
+        System.out.println("state = " + placeMap.get("state"));
+        System.out.println("latitude = " + placeMap.get("latitude"));
+
+        assertEquals("Fairfax" , placeMap.get("place name"));
+        assertEquals("Virginia" , placeMap.get("state"));
+        assertEquals("38.8604" , placeMap.get("latitude"));
+
+
     }
 
 }
