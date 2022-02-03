@@ -1,0 +1,211 @@
+
+02/02/2022 - Wednesday
+----------
+
+API Day 06
+
+API : Tue, Wed, Thur, Sat, Sun
+Office hours - 4:30 PM EST : Tue (API) , Wed(UI, IQ, Q/A), Thur(API)
+Saturday 02/05 VA Campus Day -> contact Anna
+No vaccination card required.
+
+REQUEST :
+	-> Send Get, Post, Put, Delete methods to API Endpoint/Url
+	-> Headers
+	-> Parameters(path, query)
+	-> Json body(post, put)
+
+RESPONSE :
+	-> status code
+	-> Headers
+	-> Response Json body  => response payload
+===================================================
+
+JMeter/Gatling tool is used for -> performance testing of Application/API
+
+-> status code :
+	assertEquals(200, response.statusCode());
+
+-> headers:
+	assertEquals("application/json" , response.contentType());
+
+-> json body/payload:
+	-> contains String method - not recommended
+	assertTrue(response.asString().contains("Tester"));
+
+	-> path method:
+	 assertEquals("Tester", response.path("name")); //response.path("items[0].name")
+
+	-> jsonPath:
+		JsonPath json = response.jsonPath();
+		assertEquals("Tester", json.getString("name"));
+		assertEquals(55, json.getInt("age"));
+
+	-> Deserialization: Json > java collection
+		as() method.
+	   Map<String, Object> responseData = response.as(Map.class);
+	   assertEquals("Tester", responseData.get("name"));
+	   assertEquals(55, responseData.get("age"));
+
+	-> Deserialization: Json > java custom class/POJO(plain old java object)
+	   Person person = response.as(Person.class);
+	   assertEquals("Tester", person.getName());
+	   assertEquals(55, person.getAge());
+
+Deserialization -> Converting from Json to Java object. In order to verify and read data in an easier way.
+
+Serialization -> Converting from java object to Json. Can be used when posting the data.
+
+Do we need additional dependency for (de)serialization?
+
+Yes. we need json parser library:
+	Jackson, Gson, etc
+
+Those libraries help us convert from json to java class automatically.
+Like json to java collection. json to java class etc
+And other way around as well. java collection > json
+
+We need to add this dependency in our project.
+
+Jackson/Gson libraries help with Serialization and Deserialization.
+
+===============================================
+
+add new package day06_deserialization
+
+add new class SpartanJsonToCollectionsTest extends SpartanTestBase
+
+{
+    "id": 24,
+    "name": "Nadir",
+    "gender": "Male",
+    "phone": 1321321321
+}
+
+To verify the above json body/payload, lets convert to Map object
+
+Map<String, Object> spartanMap = response.as(Map.class);
+System.out.println("spartanMap = " + spartanMap);
+spartanMap = {id=24, name=Nadir, gender=Male, phone=1321321321}
+
+Now we have converted the json to hashmap object.
+
+Now we can call get method of Map to read values and do verifications.
+
+We are deserializing from json to java collection type.
+
+[
+    {
+        "id": 206,
+        "name": "Mike",
+        "gender": "Male",
+        "phone": 2027777777
+    },
+    {
+        "id": 209,
+        "name": "Mike",
+        "gender": "Male",
+        "phone": 3435657786
+    }
+]
+
+List<Map<String, Object>> spartansList = response.as(List.class);
+
+print first spartan info map
+System.out.println(spartansList.get(0))
+
+System.out.println(spartansList.get(1))
+
+Map<String,Object> firstSpartan = spartanList.get(0);
+System.out.println(firstSpartan.get("name"));
+
+JSON >> Java collection
+
+{
+	"make":"Honda",
+	"model":"civic",
+	"year":2020
+}
+
+Map<String, Object> carMap = response.as(Map.class)
+
+[
+	{
+		"make":"Honda",
+		"model":"civic",
+		"year":2020
+	},
+	{
+		"make":"Kia",
+		"model":"sorento",
+		"year":2015
+	},
+	{
+		"make":"Audi",
+		"model":"A4",
+		"year":2010
+	}
+]
+
+List<Map<String, Object>> carMapsList = response.as(List.class)
+
+Map<String, Object> honda = carsMapsList.get(0);
+Map<String, Object> kia = carsMapsList.get(1);
+Map<String, Object> audi = carsMapsList.get(2);
+
+System.out.println(honda.get("year")); 2020
+System.out.println(kia.get("year"));   2015
+System.out.println(audi.get("year"));  2010
+
+Print each car model:
+
+for(Map<String, Object> eachCar : carMapsList) {
+	System.out.println(eachCar.get("model"));
+}
+
+================================================================
+
+POJO => Plain Old java object. Beans
+	=> it is java class that has instance variables that match the data in json or database etc
+
+{
+    "id": 24,
+    "name": "Nadir",
+    "gender": "Male",
+    "phone": 1321321321
+}
+
+public class Spartan {
+	private int id;
+	private String name;
+	private String gender;
+	private int phone;
+	//getter/setters/constructors
+}
+
+what is POJO class and how to use it?
+
+We use POJO classes to match the data of our application.
+Data could be API response json body. It could be data on UI.
+We add instance variables in Pojo class to match the data.
+
+How did u use pojo class?
+Purpose is/I used pojo to be able to de-serialize json data to java object. then easily verify it.
+
+===========================================
+
+package pojo
+
+class Spartan
+	-> int id
+	-> String name
+	-> String gender
+	-> long phone
+
+@Data annotation of lombok, automatically adds getters and setters and constructors and toString to the class. without typing them
+
+Fadime Ekin — Today at 9:56 PM
+📌 -What is encapsulation and how did you use it?
+In my project I created multiple POJO/BEAN classes in order to manage test data and actual data.
+ EX: I take JSON from API response and convert to object of my POJO class all variables are private with getters and setter.
+===================================================
