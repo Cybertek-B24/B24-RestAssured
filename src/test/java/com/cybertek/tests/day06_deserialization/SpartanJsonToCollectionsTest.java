@@ -26,6 +26,18 @@ public class SpartanJsonToCollectionsTest extends SpartanTestBase {
         //convert json response to Map object. Key+value
         Map<String, Object> spartanMap = response.as(Map.class);
         System.out.println("spartanMap = " + spartanMap);
+
+        System.out.println("id = " + spartanMap.get("id"));
+        assertEquals(24, spartanMap.get("id"));
+
+        System.out.println("name = " + spartanMap.get("name"));
+        assertEquals("Nadir" , spartanMap.get("name"));
+
+        System.out.println("gender = " + spartanMap.get("gender"));
+        assertEquals("Male" , spartanMap.get("gender"));
+
+        System.out.println("phone = " + spartanMap.get("phone"));
+        assertEquals(1321321321, spartanMap.get("phone"));
     }
 
 }
