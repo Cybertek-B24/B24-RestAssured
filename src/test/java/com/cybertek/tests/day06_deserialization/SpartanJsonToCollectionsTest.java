@@ -6,6 +6,7 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.*;
@@ -48,6 +49,26 @@ public class SpartanJsonToCollectionsTest extends SpartanTestBase {
         expected.put("phone" , 1321321321);
 
         assertEquals(expected , spartanMap);
+
+//        for(String key : spartanMap.keySet()) {
+//            System.out.println("key value= " + spartanMap.get(key));
+//        }
+
+    }
+
+    @Test
+    public void allSpartansToMapListTest() {
+        Response response = given().accept(ContentType.JSON)
+                .when().get("/api/spartans");
+
+        List<Map<String, Object>> spartansList = response.as(List.class);
+        System.out.println("spartansList = " + spartansList);
+
+        System.out.println("first spartan info = " + spartansList.get(0));
+
+        System.out.println("second spartan info = " + spartansList.get(1));
+
+        System.out.println("third spartan's id = " + spartansList.get(2).get("id"));
 
     }
 
