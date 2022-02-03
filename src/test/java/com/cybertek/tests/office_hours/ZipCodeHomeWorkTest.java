@@ -1,6 +1,7 @@
 package com.cybertek.tests.office_hours;
 
 import io.restassured.http.ContentType;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -48,6 +49,25 @@ public class ZipCodeHomeWorkTest {
 
         System.out.println("report to exists? = " + response.getHeaders().hasHeaderWithName("Report-To"));
         assertTrue(response.getHeaders().hasHeaderWithName("Report-To"));
+
+        //Json body verifications
+        JsonPath json = response.jsonPath();
+
+        //post code is 22031
+        System.out.println("post code = " + json.getString("\"post code\""));
+        assertEquals(22031 , json.getInt("\"post code\""));
+        assertEquals("22031" , json.getString("\"post code\""));
+
+        //country  is United States
+        System.out.println("country = " + json.getString("country"));
+        assertEquals("United States", json.getString("country"));
+
+        //country abbreviation is US
+        System.out.println("country abbreviation = " + json.getString("'country abbreviation'")); //"\"country abbreviation\""
+        assertEquals("US" , json.getString("'country abbreviation'"));
+
+        // place name is Fairfax
+        System.out.println("place name = " + json.getString("places[0].'place name'"));
     }
 
 }
