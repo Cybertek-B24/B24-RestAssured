@@ -74,7 +74,9 @@ public class ZipCodeHomeWorkTest {
         System.out.println("state = " + json.getString("places[0].state"));
         assertEquals("Virginia" , json.getString("places[0].state"));
 
-
+        //latitude is 38.8604
+        System.out.println("latitude = " + json.getString("places[0].latitude"));
+        assertEquals("38.8604" , json.getString("places[0].latitude"));
     }
 
 }
