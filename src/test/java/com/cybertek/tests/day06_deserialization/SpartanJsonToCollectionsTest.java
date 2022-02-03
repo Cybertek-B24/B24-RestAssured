@@ -5,6 +5,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static io.restassured.RestAssured.*;
@@ -38,6 +39,16 @@ public class SpartanJsonToCollectionsTest extends SpartanTestBase {
 
         System.out.println("phone = " + spartanMap.get("phone"));
         assertEquals(1321321321, spartanMap.get("phone"));
+
+        //create new map with expected values and compare 2 maps
+        Map<String, Object> expected = new HashMap<>();
+        expected.put("id", 24);
+        expected.put("name", "Nadir");
+        expected.put("gender", "Male");
+        expected.put("phone" , 1321321321);
+
+        assertEquals(expected , spartanMap);
+
     }
 
 }
