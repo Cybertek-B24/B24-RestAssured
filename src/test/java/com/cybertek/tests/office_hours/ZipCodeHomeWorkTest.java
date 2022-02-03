@@ -68,6 +68,13 @@ public class ZipCodeHomeWorkTest {
 
         // place name is Fairfax
         System.out.println("place name = " + json.getString("places[0].'place name'"));
+        assertEquals("Fairfax" , json.getString("places[0].'place name'"));
+
+        //state is Virginia
+        System.out.println("state = " + json.getString("places[0].state"));
+        assertEquals("Virginia" , json.getString("places[0].state"));
+
+
     }
 
 }
