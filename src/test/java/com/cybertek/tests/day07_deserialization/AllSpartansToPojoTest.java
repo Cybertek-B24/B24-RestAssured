@@ -53,6 +53,15 @@ public class AllSpartansToPojoTest extends SpartanTestBase {
         //store Jaimie info into separate spartan variable:
         //Ferhat Demir — Today at 9:05 PM
         Spartan first = spartanSearch.getContent().get(0);
+        System.out.println("id = " + first.getId());
+        System.out.println("name = " + first.getName());
+        System.out.println("gender = " + first.getGender());
+        System.out.println("phone = " + first.getPhone());
+
+        assertEquals(13 , first.getId());
+        assertEquals("Jaimie" ,  first.getName());
+        assertEquals("Female" , first.getGender());
+        assertEquals(7842554879L , first.getPhone());
 
     }
 }
