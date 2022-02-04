@@ -1,0 +1,208 @@
+
+02/03/2022
+----------
+
+API DAY 7
+---------
+
+Yesterday:
+	Verification of json body:
+	-> contains method -> not recommender
+	-> path method
+	-> jsonPath
+	-> json > java collections
+	-> json > java pojo class
+
+Serialization -> java object > json
+De-Serialization -> json > java object
+========================================
+
+POJO -> plain old java object
+-> it is a class with instance variables that matches our application data
+
+Encapsulation -> private variables with POJO classes
+
+Lombok @data annotation -> for automatically adding getters/setters/constructor/to string
+
+We can easily convert json response body to java pojo object.
+
+Spartan spartan = response.as(Spartan.class);
+then we can do the verifications.
+
+new package day07_deserialization
+
+new class AllSpartansToPojoTest
+===================================
+
+List<Spartan> can be used to match the json array with spartan objects.
+
+To achieve this sort of convertion successfully, we need to use getList method of jsonpath.
+
+List<Spartan> allSpartans = response.jsonPath().getList("",Spartan.class);
+
+===========================
+
+@Data
+public class Car {
+	private String make;
+	private String model;
+	private int year;
+}
+
+{
+	"make":"Audi",
+	"model":"A4",
+	"year":2010
+}
+
+Car car = response.as(Car.class);
+car.getMake(); => "Audi"
+------------------------
+
+[
+	{
+		"make":"Honda",
+		"model":"civic",
+		"year":2020
+	},
+	{
+		"make":"Kia",
+		"model":"sorento",
+		"year":2015
+	},
+	{
+		"make":"Audi",
+		"model":"A4",
+		"year":2010
+	}
+]
+
+List<Car> allCars = response.jsonPath().getList("",Car.class);
+
+Now we converted json array/list, into a List of Car pojo object;
+
+--- if we dont have a pojo class, we can convert above json to list of maps easily.
+
+List<Map<String, Object>> allCars = response.as(List.class);
+
+The above as() method works fine when we convert to collection.
+
+====================================
+
+What was your challenge while doing API automation?
+
+-> in my API endpoints, some responses contain nested json values or json arrays. And it was always challenging to write a matching POJO class.
+
+So I had to write multiple pojo classes to match response of api endpoints.
+
+Some API endpoints response body is dynamic, so I had to check if the json is matching one of the json schemas. then based on that I would convert/de-serialize to java object.
+
+====================================
+
+Json response body > java pojo class object
+
+We create pojo class to match the data in json of our API.
+
+====================================
+
+{
+    "region_id": 1,
+    "region_name": "Europe"
+}
+
+@Data
+public class Region {
+	private int region_id;
+	private String region_name;
+}
+
+For each key in json , I am adding an instance variable in pojo class.
+
+====================================
+
+{
+    "region-id": 1,
+    "region name": "Europe"
+}
+
+@Data
+public class Region {
+	@JsonProperty("region-id")
+	private int regionId;
+
+	@JsonProperty("region name")
+	private String regionName;
+}
+
+====================================
+
+{
+    "content": [
+        {
+            "id": 13,
+            "name": "Jaimie",
+            "gender": "Female",
+            "phone": 7842554879
+        },
+        {
+            "id": 92,
+            "name": "Caitlin",
+            "gender": "Female",
+            "phone": 6911121800
+        },
+        {
+            "id": 124,
+            "name": "Craig",
+            "gender": "Female",
+            "phone": 1642479676
+        }
+    ],
+    "totalElement": 3
+}
+
+@Data
+public class SpartanSearch {
+
+	private List<Spartan> content;
+
+	private int totalElement;
+}
+
+Environments:
+	-> Dev, QA, Staging, Prod
+	-> Each env has its own server(ip), database etc
+	-> it means when send request to API of Dev - results will be different from API result of QA
+
+{
+    "country_id": "AR",
+    "country_name": "Argentina",
+    "region_id": 2,
+    "links": [
+        {
+            "rel": "self",
+            "href": "http://54.205.239.177:1000/ords/hr/countries/AR"
+        },
+        {
+            "rel": "edit",
+            "href": "http://54.205.239.177:1000/ords/hr/countries/AR"
+        },
+        {
+            "rel": "describedby",
+            "href": "http://54.205.239.177:1000/ords/hr/metadata-catalog/countries/item"
+        },
+        {
+            "rel": "collection",
+            "href": "http://54.205.239.177:1000/ords/hr/countries/"
+        }
+    ]
+}
+
+Country -> country_id, country_name, region_id, List<Link> links
+Link -> rel, href
+
+
+Saturday -> Anna
+
+Any time
+===============================================
+
