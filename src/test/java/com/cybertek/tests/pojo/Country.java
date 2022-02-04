@@ -16,5 +16,5 @@ public class Country {
     @JsonProperty("region_id")
     private int regionId;
 
-    List<Link> links;
+    private List<Link> links;
 }
