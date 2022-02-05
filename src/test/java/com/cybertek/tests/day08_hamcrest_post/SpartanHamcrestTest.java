@@ -4,6 +4,7 @@ import com.cybertek.tests.SpartanTestBase;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -48,8 +49,56 @@ public class SpartanHamcrestTest extends SpartanTestBase {
 
         //check all values of json
         assertThat(spartanMap.values(), hasItems(24, "Nadir", "Male" , 1321321321));
+
+
+
     }
 
+    /**
+     * given accept type json
+     * get request to /api/spartans
+     * then status code is 200
+     * and content type is json
+     * Then extract names of spartans into a List<String>
+     */
+    @Test
+    public void getSpartanNamesTest() {
+        List<String> names = given().accept(ContentType.JSON)
+                .when().get("/api/spartans")
+                .then().assertThat().statusCode(200)
+                .and().contentType(ContentType.JSON)
+                .and().extract().body().jsonPath().getList("name");
+                //.and().extract().body().path("name");
 
-    
+        System.out.println("names = " + names);
+        assertThat(names, hasSize(238));
+        assertThat(names, hasItems("Nadir", "Eric" , "Melania"));
+    }
+
+    /**
+     * given accept type json
+     * nameContains "v"
+     * gender is "Male'
+     * get request to /api/spartans/search
+     * then status code is 200
+     * and content type is json
+     * and return/extract totalElement value as an int
+     * int totalElement = given...
+     */
+    @Test
+    public void getTotalElementTest() {
+       int totalElement=  given().accept(ContentType.JSON)
+                .and().queryParam("nameContains" , "v")
+                .and().queryParam("gender" , "Male")
+                .when().get("/api/spartans/search")
+                .then().assertThat().statusCode(200)
+                .and().contentType(ContentType.JSON).log().all()
+                .and().extract().path("totalElement");
+                //.and().extract().body().jsonPath().getInt("totalElement");
+
+        System.out.println("totalElement = " + totalElement);
+        assertThat(totalElement, is(equalTo(5)));
+       //BREAK TILL 4:24 PM EST
+    }
+
 }
