@@ -2,6 +2,7 @@ package com.cybertek.tests.day08_hamcrest_post;
 
 import com.cybertek.tests.SpartanTestBase;
 import io.restassured.http.ContentType;
+import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -110,6 +111,15 @@ public class SpartanHamcrestTest extends SpartanTestBase {
                 .when().get("/api/spartans/2400")
                 .then().assertThat().statusCode(404)
                 .and().body("error" , equalTo("Not Found"));
+
+        Response response = given().accept(ContentType.JSON)
+                .when().get("/api/spartans/2400");
+        //junit
+        assertEquals(404, response.statusCode());
+        assertEquals("Not Found" , response.path("error"));
+        //hamcrest
+        assertThat(response.statusCode(), is(404));
+        assertThat(response.path("error") , is("Not Found"));
     }
 
 
