@@ -35,7 +35,8 @@ public class HamcrestMatcherWithApiTest {
                 .when().get("https://reqres.in/api/users")
                 .then().assertThat().body("data.id", hasSize(6),
                                           "data.id" , hasItems(1,2,3,4,5,6),
-                        "data.first_name",hasItems("George", "Eve", "Emma"));
+                        "data.first_name",hasItems("George", "Eve", "Emma"))
+                .log().all();
     }
 
 }
