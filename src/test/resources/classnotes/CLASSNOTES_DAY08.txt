@@ -1,0 +1,231 @@
+
+02/05/2022
+----------
+
+API Testing day 8
+-----------------
+
+Last class:
+	- POJO - plain old java object.
+	- I create POJO classes to match the json from API endpoints
+	- I de-serialize the json to java object to be able to easily verify/assert values
+	- All instance variables of pojo classes match the key names of json
+	- I use encapsulation by making variables private
+	- I automatically add getter/setters/constructor/toString by using @Data annotation of lombok library
+
+{
+	"region_id", 5,
+	"region_name","Americas"
+}
+
+POJO:
+
+@Data
+public class Region {
+
+	private int region_id;
+
+	@JsonProperty("region_name")
+	private String regionName;
+}
+
+When pojo variable name and json key name are different, we can use
+@JsonProperty annotation. otherwise it will not be able to match.
+If key in json and variable names are same, then there is no need for @JsonProperty
+
+--------------
+Deserialization library/ json parser library:
+	Jackson , Gson ...
+
+--------------
+
+Usage:
+
+Response response = RestAssured.get("//regions/5");
+
+DESERIALIZATION:
+	Region region = response.body().as(Region.class);
+
+.as(Region.class); => means we want the json response to be converted to Region class object.
+
+assertEquals(5 , region.getRegion_id());
+assertEquals("Americas", region.getRegionName());
+
+
+CODE > COMPILER > EXECUTION
+=======================================
+
+Devran Jameson Perkins — Today at 10:29 AM
+how can we use lombok with encapsulated webelements? does it work the same @Murodil
+
+Yes, it works with all data types.
+
+@Data
+public class LoginPage extends BasePage {
+
+	@FindBy(id="user")
+	private WebElement username;
+
+	public void setUserName(String userId) {
+		username.sendKeys(userId)
+	}
+}
+
+LoginPage loginPage = new LoginPage();
+loginPage.getUsername().click();
+
+============================================
+
+Mariia Priimak — Today at 10:33 AM
+@Murodil if working on E-commerce platform each of those 500-1000 pages have to have to follow  page object model ? Or better approach do not follow that?
+
+When I use page object model for E-commerce application, I use inheritance commonly, because most pages will share common elements.
+Also even though the data is different, the elements stay mostly the same.
+
+ASSERTION LIBRARIES:
+	- testNG
+	- junit
+	- hamcrest
+
+testNG and junit assertions are similar. like assertEquals, assertTrue etc.
+Only the package import statement is different.
+
+hamcrest is one of other assertion libraries, it stands out to be more readable and more flexible.
+It has different built in verification libraries.
+
+hamcrest works with RestAssured library.
+
+@Murodil  does Hamcrest have @Test annotation to run our tests or we have to use it with together with junit?
+
+No, it has only readable assertions.
+
+===============================================
+
+Hamcrest has one method: assertThat(....)
+and many MATCHERs :  assertThat(5, equalTo(5));
+equalTo, is, not, hasItem, hasItems etc...
+
+===============================================
+
+add new package day08_hamcrest_post
+
+add new class HamcrestMatchersIntro
+
+===============================================
+
+Feyruz Shahmuradov — Today at 10:57 AM
+@Murodil are we going to see a single framewoork that has all three layers of the applicatioon pacckages in it ?
+
+It would be good to see one test case/scenario example that covers all three layer in a single Hybrid framework
+
+Yes, I use single Cucumber bdd framework for testing of all layers of application.
+I organize my UI, API, DB tests into separate packages.
+
+===========================================================
+
+Zafer Kahveci — Today at 11:23 AM
+so we dont need to add dependency for hamcrest? @Murodil
+
+Not in our project because hamcrest is already coming with RestAssured library
+
+
+List<Integer> nums = Arrays.asList(3, 1, 6, 9, 10, 55);
+
+That is shortcut to declare arraylist and add values in single statement.
+We could do in multple steps :
+
+List<Integer> nums = new ArrayList<>();
+nums.add(3);
+nums.add(1);
+nums.add(6);
+nums.add(9);
+nums.add(10);
+nums.add(55);
+
+========================================
+HAMCREST ASSERTION EXAMPLES WITH MATCHERS
+ //numbers
+        assertThat(4 + 3, equalTo(7));
+        assertThat(11 + 23 , is(34));
+        assertThat(5 + 2 , is(equalTo(7)));
+
+        assertThat(5 + 5 , not(8));
+        assertThat(10 + 3, is(greaterThan(11)));
+
+        //String assertions
+        String str = "B24 - wooden spoon";
+        assertThat(str , equalTo("B24 - wooden spoon"));
+        assertThat(str, startsWith("B24"));
+        assertThat(str, endsWith("spoon"));
+        assertThat(str, containsStringIgnoringCase("WOODEN"));
+
+        str= "";
+        assertThat(str, emptyString());
+
+        //list examples
+        List<Integer> nums = Arrays.asList(3, 1, 6, 9, 10, 55);
+
+        assertThat(nums , hasSize(6)); //check size
+        assertThat(nums, hasItem(10)); //check if contains 10
+
+        assertThat(nums, hasItems(1, 3, 55));
+        assertThat(nums, everyItem(lessThan(100)));
+==================================================
+
+
+RestAssured and Hamcrest.
+
+RestAssured has BUILT-IN assertions that we can use by chaining the steps.
+
+those assertions are done by using Hamcrest matchers.
+
+EX:
+	give().accept(ContentType.JSON)
+	.when().get("//api/spartans/3")
+	.then().assertThat().statusCode(200)
+	.then().contentType("application/json")
+	.and().body("name", equalTo("Nadir"));
+
+In This example, we chained response verifications in single statement.
+Internally hamcrest assertions/matchers are used for the verifications
+
+class HamcrestMatcherWithApiTest
+
+
+{
+    "message": "Hello World!"
+}
+
+response.path("message") => Hello World!
+
+.and().body("message" , equalTo("Hello World!"));
+
+the above statement - "message" -> key in json and will return the value.
+It uses same navigation in json as we saw while using PATH method
+
+==========================================================================
+
+.log().all() -> prints all information of response (status code, header, json body)
+
+
+class SpartanHamcrestTest
+
+spartanMap
+{id=24, name=Nadir, gender=Male, phone=1321321321}
+
+read the keys only
+spartanMap.keySet() => Set object with -> id,name,gender,phone
+
+read only values:
+spartanMap.values() -> 24, Nadir, Male, 1321321321
+
+===============================================
+
+
+.and().extract()....
+
+extract() -> it can help retrieve values from response.
+
+extract().response().statusCode() => returns status code
+extract().body().as(Map.class) => returns json body as map
+...
