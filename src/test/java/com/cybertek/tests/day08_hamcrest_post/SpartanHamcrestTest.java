@@ -98,7 +98,19 @@ public class SpartanHamcrestTest extends SpartanTestBase {
 
         System.out.println("totalElement = " + totalElement);
         assertThat(totalElement, is(equalTo(5)));
-       //BREAK TILL 4:24 PM EST
     }
+
+    /**
+     * get /api/spartans/2400
+     * in single statement, verify status code 404 and status is "not found"
+     */
+    @Test
+    public void invalidSpartanTest() {
+        given().accept(ContentType.JSON)
+                .when().get("/api/spartans/2400")
+                .then().assertThat().statusCode(404)
+                .and().body("error" , equalTo("Not Found"));
+    }
+
 
 }
