@@ -174,7 +174,74 @@ POST method of API:
 
 ------------------------
 
-BREAK TILL 12:17 PM EST
+==============================
+
+{
+  "gender": "Male",
+  "name": "Teacher Request",
+  "phone": 2112562345
+}
+
+/api/spartans
+
+
+given accept is json
+and content type is json
+when I send POST request to /api/spartans
+with {
+  "gender": "Male",
+  "name": "Teacher Request",
+  "phone": 2112562345
+}
+Then status code is 201
+And "spartan is born" message should be displayed
+===================================================
+
+POST request:
+	-> POST api url /api/spartans
+	-> headers -> accept, contentType
+	-> request json body:
+		{
+		  "gender": "Male",
+		  "name": "Teacher Request",
+		  "phone": 2112562345
+		}
+   RESPONSE:
+   		-> status code 201
+   		-> headers
+   		-> response json body
+
+===================================================
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
