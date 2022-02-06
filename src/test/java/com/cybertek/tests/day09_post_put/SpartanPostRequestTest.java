@@ -5,6 +5,9 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static io.restassured.RestAssured.*;
@@ -44,6 +47,29 @@ public class SpartanPostRequestTest extends SpartanTestBase {
         //And "A Spartan is Born!" message should be displayed
         System.out.println("message = " + response.path("success"));
         assertThat(response.path("success"), is(equalTo("A Spartan is Born!")));
+    }
+
+    @Test
+    public void postSpartanWithMapTest() {
+        Map<String, Object> requestMap = new LinkedHashMap<>();
+        requestMap.put("name", "TestMapPost");
+        requestMap.put("gender", "Female");
+        requestMap.put("phone", 3211231234L);
+
+        Response response = given().accept(ContentType.JSON)
+                .and().contentType(ContentType.JSON)
+                .and().body(requestMap) //Java object > Json
+                .when().post("/api/spartans");
+
+        System.out.println("status code = " + response.statusCode());
+        /**
+         * Response verifications
+         * status code is 201
+         * content type is json
+         * name is TestMapPost
+         * gender is Female
+         * phone is 3211231234L
+         */
     }
 
 
