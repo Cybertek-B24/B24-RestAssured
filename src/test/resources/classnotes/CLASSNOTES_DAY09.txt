@@ -1,0 +1,186 @@
+
+02/06/2022
+----------
+
+Api Day 9
+---------
+
+Recap practice task
+-------------------
+
+given accept type is json
+when I send get request to /countries
+Then status code is 200
+and content type is json
+and count should be 25
+and country ids should contain "AR,AU,BE,BR,CA"
+and country names should have "Argentina,Australia,Belgium,Brazil,Canada"
+
+package day09_post_put
+
+ORDSCountriesHamcrestTest
+=======================================================
+
+HAMCREST MACHERS:
+	-> library containing assertion matchers
+	-> it is very readable and easy to use for verifications
+
+2 Ways we can use Hamcrest while doing API automation with RestAssured:
+
+1) Chaining the assertions using RestAssured methods
+
+2) Store response and doing assertions using assertThat method and matchers
+
+----------
+
+1)
+given().accept(ContentType.JSON)
+    .when().get("/countries")
+    //response assertions/verification:
+    .then().assertThat().statusCode(200)
+    .and().contentType(ContentType.JSON)
+    .and().body("count", equalTo(25),
+            "items.country_id" , hasItems("AR", "AU", "BE", "BR", "CA") ,
+            "items.country_name" , hasItems("Argentina", "Australia", "Belgium", "Brazil", "Canada"))
+    .log().all();
+
+
+2) Response response = given().accept(ContentType.JSON)
+                .when().get("/countries");
+
+   assertThat(response.statusCode(), equalTo(200));
+   assertThat(response.contentType(), is("application/json"));
+   assertThat(response.path("count"), is(25));
+   assertThat(response.path("items.country_id"), hasItems("AR", "AU", "BE", "BR", "CA"));
+   assertThat(response.path("items.country_name"), hasItems("Argentina", "Australia", "Belgium", "Brazil", "Canada"));
+============================================================================
+
+Documentation: Swagger
+
+Summary of GET request:
+	REQUEST:
+		- API endpoint that works with GET request
+		- Headers (accept, credentials)
+		- parameters(path/url param. query param)
+
+	RESPONSE:
+		- status code(2XX - Success, 3XX - redirect, 4XX - client error,5XX- server/api error)
+		- headers (contentType, Data etc)
+		- json response body
+
+Verifying status codes and headers are straighforward, can use junit or hamcrest assertions.
+
+Verifying json response takes effort of reading the json and analyzing the structure of json.
+
+We have many options now, when it comes to verification of Json response:
+
+{
+	"language","java"
+}
+
+1) contains methods of String class: not recommended:
+
+	assertTrue(response.asString().contains("java"));
+
+2) path method:
+	assertEquals("java", response.path("language"));
+
+3) jsonPath:
+	JsonPath json = response.jsonPath();
+	assertEquals("java", json.getString("language"));
+
+	OR: assertEquals("java", response.jsonPath().getString("language"));
+
+4) DE-serialization to java collection. (json to java object)
+
+	Map<String, Object> resMap = response.as(Map.class);
+	assertEquals("java", resMap.get("language"));
+
+	Map<String, Object> expMap = new LinkedHashMap<>();
+	expMap.put("language","java");
+
+	assertEquals(expMap, resMap);
+
+5) DE-serialization to java POJO object. json > java object
+	Parser library working in background: Jackson
+
+	@Data //lombok -getter/setter etc
+	public class Tech {
+		private String language;
+	}
+
+	Tech tech = response.as(Tech.class);
+	assertEquals("java", tech.getLanguage());
+--------
+Hamcrest assertion:
+
+6) => chaining RestAssured methods and asserting in single statement using hamcrest matchers:
+	given().accept(ContentType.JSON)
+	.when().get("/test")
+	.then().assertThat().statusCode(200)
+	.and().contentType(ContentType.JSON)
+	.and().body("language",equalTo("java"));
+
+ => Store the response and use assertThat method with hacmrest matchers:
+
+ 	Response response = given().accept(ContentType.JSON)
+	.when().get("/test");
+
+	assertThat(response.statusCode(), is(200);
+	assertThat(response.contentType(), is("application/json");
+	assertThat(response.path("language"), is("java");
+====================================================================
+
+Gultakin Ibrahimova — Today at 11:25 AM
+@Murodil There is IQ:  What is the difference between assert and verify in selenium? We say either  assert or verify.
+
+when assert fails - test execution stops at that point, and the next test starts(if any)
+
+when verify fails - test execution does not stop and it runs till the end, then error is reported
+
+------------------------
+
+TESTNG:
+
+	assert -> assertEquals(4+2, 6);
+	verify -> softassertion:
+		SoftAssert softAssert = new SoftAssert();
+		softAssert.assertEquals(4+2, 6);
+		...
+		softAssert.assertAll(); report if any errors
+
+--> try catch could also be used to just report error and not stop execution.
+------------------------
+
+CRUD OPERATIONS:   API      SQL
+	C -> Create -> post   -> insert
+	R -> Read   -> get    -> select
+	U -> Update -> put    -> update
+	D -> Delete -> delete -> delete
+
+------------------------
+HTTP methods -> post, get, put, delete, patch(partial update)
+
+POST method of API:
+	REQUEST:
+		-> API Endpoint that works with POST method
+		-> Headers
+		-> Json body. containing data to be posted/added
+
+	RESPONSE:
+		-> status code 201 - created
+		-> headers
+		-> json body (containing values from request part)
+
+------------------------
+
+BREAK TILL 12:17 PM EST
+
+
+
+
+
+
+
+
+
