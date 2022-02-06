@@ -2,6 +2,7 @@ package com.cybertek.tests.day09_post_put;
 
 import com.cybertek.tests.SpartanTestBase;
 import io.restassured.http.ContentType;
+import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.Test;
 
@@ -66,10 +67,21 @@ public class SpartanPostRequestTest extends SpartanTestBase {
          * Response verifications
          * status code is 201
          * content type is json
+         * message is A Spartan is Born!
          * name is TestMapPost
          * gender is Female
          * phone is 3211231234L
+         * id is more than 0
          */
+        assertThat(response.statusCode(), is(201));
+        assertThat(response.contentType(), is("application/json"));
+        JsonPath json = response.jsonPath();
+        assertThat(json.getString("success"), is("A Spartan is Born!"));
+        assertThat(json.getString("data.name"), is("TestMapPost"));
+        assertThat(json.getString("data.gender") , is("Female"));
+        assertThat(json.getLong("data.phone") , is(3211231234L));
+        assertThat(json.getInt("data.id"), greaterThan(0));
+
     }
 
 
