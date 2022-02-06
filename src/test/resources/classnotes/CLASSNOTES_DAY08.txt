@@ -229,3 +229,4 @@ extract() -> it can help retrieve values from response.
 extract().response().statusCode() => returns status code
 extract().body().as(Map.class) => returns json body as map
 ...
+
