@@ -81,9 +81,11 @@ public class SpartanPostRequestTest extends SpartanTestBase {
         assertThat(json.getString("data.gender") , is("Female"));
         assertThat(json.getLong("data.phone") , is(3211231234L));
         assertThat(json.getInt("data.id"), greaterThan(0));
-
     }
 
+    @Test
+    public void postSpartanAndVerifyWithMapTest() {
 
+    }
 
 }
