@@ -85,7 +85,19 @@ public class SpartanPostRequestTest extends SpartanTestBase {
 
     @Test
     public void postSpartanAndVerifyWithMapTest() {
+        Map<String, Object> requestMap = new LinkedHashMap<>();
+        requestMap.put("name" , "WoodenSpoon");
+        requestMap.put("gender" , "Male");
+        requestMap.put("phone", 3455431234L);
 
+        Response response = given().accept(ContentType.JSON)
+                .and().contentType(ContentType.JSON)
+                .and().body(requestMap)
+                .when().post("/api/spartans");
+
+        assertThat(response.statusCode(), is(201));
+        Map<String, Object> responseMap = response.jsonPath().getMap("data");
+        System.out.println("responseMap = " + responseMap);
     }
 
 }
