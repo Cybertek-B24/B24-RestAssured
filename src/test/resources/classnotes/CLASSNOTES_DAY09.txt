@@ -203,8 +203,8 @@ POST request:
 	-> request json body:
 		{
 		  "gender": "Male",
-		  "name": "Teacher Request",
-		  "phone": 2112562345
+		  "name": "RestAssured Post",
+		  "phone": 2115552345
 		}
    RESPONSE:
    		-> status code 201
@@ -213,41 +213,65 @@ POST request:
 
 ===================================================
 
+Gultakin Ibrahimova — Today at 2:18 PM
+@Murodil  will we create  a future file for API testing separately? Since our framework is Cucumber BDD and we are saying we are testing all 3 layers of app-n.
+
+We add feature files and step definitions for API tests in cucumber project seperately.
+If scenario steps are going over UI and API, then feature file includes both steps.
+
+===================================================
+
+When we are doing post request, we always include json request body, it will contain data that we want to post using API.
+
+When doing automation, RestAssured allows several ways of passing json request body.
+
+1) as a String
+
+    String requestJson = "{\"gender\": \"Male\",\n" +
+                                "\"name\": \"RestAssuredPost\",\n" +
+                                "\"phone\": 2115552345}";
+
+     Response response = given().accept(ContentType.JSON)
+                .and().contentType(ContentType.JSON)
+                .and().body(requestJson)
+                .when().post("/api/spartans");
+
+2) using a map.
+
+	SERIALIZATION > converting java object to Json.
+	In below example, body() method is automatically converting java map object
+	to json.
+
+	Map<String, Object> requestMap = new LinkedHashMap<>();
+	requestMap.put("gender", "Female");
+	requestMap.put("name","TestMapPost");
+	requestMap.put("phone", 3211235432L);
+
+     Response response = given().accept(ContentType.JSON)
+                .and().contentType(ContentType.JSON)
+                .and().body(requestMap) //automatically convert map object to json
+                .when().post("/api/spartans");
+
+POST request headers:
+	accept(ContentType.JSON) => Hey api, I only except json response
+	contentType(ContentType.JSON) => Hey api, I am sending you json value
 
 
+3) Using a POJO: we can create object of pojo class that matches the request json and assign values then pass to request.
+It will automatically Convert to Json (SERIALIZE).
 
+Spartan reqSpartan = new Spartan();
+reqSpartan.setName("POJOpost");
+reqSpartan.setGender("Female");
+reqSpartan.setPhone(9877891234L);
 
+Response response = given().accept(ContentType.JSON)
+        .and().contentType(ContentType.JSON)
+        .and().body(reqSpartan) //automatically convert spartan object to json
+        .when().post("/api/spartans");
+===========================================
 
+The same approach will work for PUT request as well, that we will quickly go over next class.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Tuesday/Wed/Thur -> office hours : 4:30 PM -> practice recent API topics
+				 -> class 7 PM -> API topics
