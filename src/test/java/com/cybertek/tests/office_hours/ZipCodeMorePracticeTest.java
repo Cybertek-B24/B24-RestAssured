@@ -43,5 +43,19 @@ public class ZipCodeMorePracticeTest {
         assertThat(place.getStateAbbreviation(), equalTo("NY"));
     }
 
-
+    @Test
+    public void zipcodeHamcrestChainingTest() {
+        given().accept(ContentType.JSON)
+                .when().get("/us/20171")
+                .then().assertThat().statusCode(200)
+                .and().contentType(ContentType.JSON)
+                .and().body("'post code'", equalTo("20171"),
+                            "country"   , equalTo("United States"),
+                             "'country abbreviation'", equalTo("US"),
+                             "places[0].'place name'", equalTo("Herndon"),
+                             "places[0].longitude" , equalTo("-77.3928"),
+                             "places[0].state" , equalTo("Virginia"),
+                             "places[0].'state abbreviation'" , equalTo("VA"),
+                             "places[0].latitude" , equalTo("38.9252"));
+    }
 }
