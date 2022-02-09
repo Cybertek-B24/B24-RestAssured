@@ -29,27 +29,43 @@ public class ORDSPostPutDeleteRegionTest extends ORDSTestBase {
      */
     @Test
     public void postARegionTest() {
+        int regionId = 999;
         //delete region by id, before posting:
-        deleteRegion(999);
+        deleteRegion(regionId);
 
         Map<String, Object> regionRequestMap = new LinkedHashMap<>();
-        regionRequestMap.put("region_id", 999);
+        regionRequestMap.put("region_id", regionId);
         regionRequestMap.put("region_name","Test Region");
         
         Map<String, Object> regionResponseMap = given().accept(ContentType.JSON)
                 .and().contentType(ContentType.JSON)
                 .and().body(regionRequestMap)
                 .when().post("/regions/")
-                .then().assertThat().statusCode(201)
+                .then().assertThat().statusCode(201) //verify 201 created status code
+                .and().contentType(ContentType.JSON)
+                .and().extract().body().as(Map.class); //convert json response to Map
+        //compare request map values match the response map values
+        System.out.println("regionResponseMap = " + regionResponseMap);
+        assertEquals(regionRequestMap.get("region_id"), regionResponseMap.get("region_id"));
+        assertEquals(regionRequestMap.get("region_name"), regionResponseMap.get("region_name"));
+
+        //send a get request with region_id and verify it matches the post request map data
+        Map<String, Object> getRequestMap = given().accept(ContentType.JSON)
+                .when().get("/regions/"+regionId)
+                .then().assertThat().statusCode(200)
                 .and().contentType(ContentType.JSON)
                 .and().extract().body().as(Map.class);
 
-        System.out.println("regionResponseMap = " + regionResponseMap);
-        //assertions
+        //verify getRequestMap details match regionRequestMap of post
+        System.out.println("getRequestMap = " + getRequestMap);
+        assertEquals(regionRequestMap.get("region_id"), getRequestMap.get("region_id"));
+        assertEquals(regionRequestMap.get("region_name"), getRequestMap.get("region_name"));
+
     }
 
-    public static void deleteRegion(int regionId) {
-        when().delete("/regions/" + regionId);
+    public void deleteRegion(int regionId) {
+        //              /regions/999
+        when().delete("/regions/" + regionId).then().log().all();
     }
 
 }
