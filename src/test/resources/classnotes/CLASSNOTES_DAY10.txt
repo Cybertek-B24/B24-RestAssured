@@ -1,0 +1,77 @@
+
+02/08/2022
+----------
+
+API Day 10
+----------
+
+Last class:
+	- post method
+	- how to use post method to add/insert/create data
+
+CRUD operations -> Create - POST
+				-> Read - GET
+				-> Update - PUT
+				-> Delete - DELETE
+-------------------------------------------------------
+
+-------------------------------------------------------
+Adalat Omarov — Today at 8:12 PM
+Most of the APIs allow only get operations ? do i get it right? @Murodil
+
+Each API application will have multiple endpoints, depending how developer designed it, some endpoints :
+	- work with only GET
+	- some work with POST method
+	- some accepts parameters and some dont.
+
+How do I know?
+Need to check documentation or examples.
+Documentation: Swagger UI, some documents with descriptions in Jira, Confluence etc
+Or teammate can share API collection of Postman. where all endpoints with examples are present.
+
+
+-------------------------------------------------------
+
+When we send POST request to RESTful API, we include:
+	-> json request body / json payload. It contains data that we want to be added to application database.
+	-> headers. Accept - json, content-type json.
+
+
+We saw example how we can include json with our request:
+	1) as a String
+	2) as a map / collection
+	3) as a pojo class object
+
+==================================================================
+
+How do you know that Post request was successful?
+
+1) status code: 201 - created
+2) json response body, normally contains the data that was part of request json.
+and success message
+3) verify the data is matching in database
+4) send GET request for that data that you posted and see if result is matching
+5) search for the record in the UI and verify it is matching
+.....
+
+
+add new package day10_post_put_delete
+
+add new class ORDSPostPutDeleteRegion
+
+==================================================================
+
+DELETE method is used to delete a record using API request.
+We send DELETE request to Rest API method.
+Normally we pass a path parameter with ID to be deleted.
+
+when().delete("/api/spartans/206")
+.then().assertThat().statusCode(200);
+
+it may contain json response with message to indicate successful deletion.
+
+==================================================================
+
+DELETE REGION - by region_id
+	POST REGION - by region_id and name. then verify response json matches post data.
+	GET REGION - by region_id, then verify get response matches post data.
