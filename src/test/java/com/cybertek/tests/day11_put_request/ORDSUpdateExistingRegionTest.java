@@ -33,7 +33,7 @@ public class ORDSUpdateExistingRegionTest extends ORDSTestBase {
         //create pojo instance for put request
         Region reqRegion = new Region();
         reqRegion.setRegionId(regionId);
-        reqRegion.setRegionName("hello hello");
+        reqRegion.setRegionName("WoodenTest");
 
         Region resRegion = given().accept(ContentType.JSON)
                 .and().contentType(ContentType.JSON)
