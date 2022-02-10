@@ -1,6 +1,8 @@
 package com.cybertek.tests.day11_put_request;
 
 import com.cybertek.tests.SpartanTestBase;
+import com.cybertek.tests.pojo.Spartan;
+import com.cybertek.utilities.RestUtils;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.Test;
 
@@ -49,15 +51,19 @@ public class UpdateSpartanTest extends SpartanTestBase {
      */
     @Test
     public void patchSpartanTest() {
-
+        //map for patch request body
         Map<String,Object> spartanMap = new LinkedHashMap<>();
         spartanMap.put("phone", 5555555555L);
-
+        //send patch request and check status code
         given().contentType(ContentType.JSON)
                 .and().pathParam("id", 1126)
                 .and().body(spartanMap)
                 .when().patch("/api/spartans/{id}")
                 .then().assertThat().statusCode(204);
+
+        //send get request with same spartan id and verify phone number update
+        Spartan spartan = RestUtils.getSpartan(1126);
+        assertThat(spartan.getPhone(), is(spartanMap.get("phone")));
 
     }
 }
