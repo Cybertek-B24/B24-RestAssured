@@ -1,0 +1,78 @@
+
+02/09/2022
+----------
+
+API DAY 11:
+	Yesterday:
+		- post, delete
+		- put method
+
+
+HTTP METHODS:
+	Get, Post, Put, Delete, Patch
+
+CRUD Operations -> Create, Read, Update, Delete
+
+GET request -> it is used to read existing values. Similar to searching for an item in amazon.com. We are just getting results and viewing. not updating or adding new one.
+
+POST request -> used for creating/adding new values/Record. Similar to creating an account on Gmail. or amazon. Or adding a new product for sale on Amazon.
+
+PUT request -> used for updating existing record. Similar to changing your phone number in amazon account profile. Or updating the product description on the product page. If record/resource does not exist, PUT request can also add a new one.
+Again it depending if specific API URL is developed to support it.
+
+DELETE request -> used for deleting the record/resource/data. Similar to deleting your photo from facebook. or deleting your amazon account.
+
+PATCH request -> used for partially updating. Similar to updating your weight in your medical account. Or updating your income in bank account
+
+----------------------------------------------------------------------
+
+add new package day11_put_request
+
+Add new class ORDSUpdateExistingRegionTest
+
+
+Given accept type is Json
+And content type is json
+When i send put request to /regions/999
+With json body:
+	{
+   	 "region_id": 999,
+   	 "region_name": "Wooden Region"
+	}
+Then status code is 200
+And content type is json
+And json response shoul contain updated values
+
+----------------------------------------------------------------------
+
+Add new class UpdateSpartanTest
+
+
+given content type is json
+When i send put request to /api/spartans/1126
+With json body:
+{
+  "gender": "Male",
+  "name": "Changed",
+  "phone": 1234567890
+}
+Then status code is 200
+----------------------------------------------------------------------
+
+/**
+	given content type is json
+	When i send patch request to /api/spartans/1126
+	With json body:
+	{
+	  "phone": 1234567890
+	}
+	Then status code is 204
+*/
+@Test
+public void patchSpartanTest() {
+
+}
+----------------------------------------------------------------------
+
+AUTHORIZATION in API
+
