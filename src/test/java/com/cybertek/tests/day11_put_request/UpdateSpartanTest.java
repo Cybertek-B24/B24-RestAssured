@@ -37,4 +37,27 @@ public class UpdateSpartanTest extends SpartanTestBase {
                 .when().put("/api/spartans/1126")
                 .then().assertThat().statusCode(204);
     }
+
+    /**
+     given content type is json
+     When i send patch request to /api/spartans/1126
+     With json body:
+     {
+     "phone": 1234567890
+     }
+     Then status code is 204
+     */
+    @Test
+    public void patchSpartanTest() {
+
+        Map<String,Object> spartanMap = new LinkedHashMap<>();
+        spartanMap.put("phone", 5555555555L);
+
+        given().contentType(ContentType.JSON)
+                .and().pathParam("id", 1126)
+                .and().body(spartanMap)
+                .when().patch("/api/spartans/{id}")
+                .then().assertThat().statusCode(204);
+
+    }
 }
