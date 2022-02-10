@@ -33,7 +33,7 @@ public class ORDSUpdateExistingRegionTest extends ORDSTestBase {
         //create pojo instance for put request
         Region reqRegion = new Region();
         reqRegion.setRegionId(regionId);
-        reqRegion.setRegionName("Wooden Region");
+        reqRegion.setRegionName("hello hello");
 
         Region resRegion = given().accept(ContentType.JSON)
                 .and().contentType(ContentType.JSON)
@@ -41,10 +41,14 @@ public class ORDSUpdateExistingRegionTest extends ORDSTestBase {
                 .when().put("/regions/"+regionId)
                 .then().assertThat().statusCode(200)
                 .and().contentType(ContentType.JSON)
+                //.and().body("region_id", is(999))
                 .and().extract().body().as(Region.class);
 
         //verify json response should contain updated values
+       // response.path("region_name") => we could use this if we used response object.
 
+        assertThat(reqRegion.getRegionId(), is(equalTo(resRegion.getRegionId())));
+        assertThat(reqRegion.getRegionName(), is(equalTo(resRegion.getRegionName())));
     }
 
 }
