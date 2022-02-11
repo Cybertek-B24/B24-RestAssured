@@ -6,6 +6,8 @@ import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static io.restassured.RestAssured.*;
@@ -28,6 +30,11 @@ public class SpartanWithAuthTest {
      */
     @Test
     public void adminGetAllSpartans() {
-
+        given().accept(ContentType.JSON)
+                .and().auth().basic("admin","admin")
+                .when().get("/api/spartans")
+                .then().assertThat().statusCode(200)
+                .and().contentType(ContentType.JSON)
+                .and().body("id", isA(List.class)).log().all();
     }
 }
