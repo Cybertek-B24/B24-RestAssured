@@ -40,6 +40,22 @@ public class SpartanWithAuthTest {
         //check if the result of "id" path returns a List
         System.out.println("allIds.size() = " + allIds.size());
         System.out.println("allIds = " + allIds);
-        
     }
+    /**
+     * Given accept type is json
+     * and no credentials
+     * When I send get request to "/api/spartans"
+     * Then status code is 401
+     * and content type is json
+     * And json response should have "message": "Unauthorized"
+     */
+    @Test
+    public void noAuthGetSpartansNegativeTest() {
+        given().accept(ContentType.JSON)
+                .when().get("/api/spartans")
+                .then().assertThat().statusCode(401)
+                .and().contentType(ContentType.JSON)
+                .and().body("message" , is("Unauthorized"));
+    }
+
 }
