@@ -30,12 +30,16 @@ public class SpartanWithAuthTest {
      */
     @Test
     public void adminGetAllSpartans() {
-        given().accept(ContentType.JSON)
+       List<Integer> allIds = given().accept(ContentType.JSON)
                 .and().auth().basic("admin","admin")
                 .when().get("/api/spartans")
                 .then().assertThat().statusCode(200)
                 .and().contentType(ContentType.JSON)
-                .and().body("id", isA(List.class)).log().all();
+                //.and().body("id", isA(List.class)).log().all();
+                .and().extract().body().path("id");
         //check if the result of "id" path returns a List
+        System.out.println("allIds.size() = " + allIds.size());
+        System.out.println("allIds = " + allIds);
+        
     }
 }
