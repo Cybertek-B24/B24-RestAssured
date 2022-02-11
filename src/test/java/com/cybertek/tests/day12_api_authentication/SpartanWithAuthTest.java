@@ -36,5 +36,6 @@ public class SpartanWithAuthTest {
                 .then().assertThat().statusCode(200)
                 .and().contentType(ContentType.JSON)
                 .and().body("id", isA(List.class)).log().all();
+        //check if the result of "id" path returns a List
     }
 }
