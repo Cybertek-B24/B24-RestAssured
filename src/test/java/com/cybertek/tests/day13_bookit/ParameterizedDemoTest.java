@@ -1,5 +1,6 @@
 package com.cybertek.tests.day13_bookit;
 
+import com.cybertek.utilities.ExcelUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -21,10 +22,22 @@ public class ParameterizedDemoTest {
         System.out.println("name = " + name);
     }
 
+    /**
+     * read all credentials from BookItQA3.xlsx file
+     * and return as List of maps
+     * Map will have 2 keys, email and password
+     * @return
+     */
     public static List<Map<String, String>> getAllUserCredentials() {
-
+        //open excel file/sheet
+        ExcelUtil excelUtil = new ExcelUtil("BookItQa3.xlsx","QA3");
+        //returns excel data as list of maps
+        return excelUtil.getDataList();
     }
 
-
-
+    @ParameterizedTest
+    @MethodSource("getAllUserCredentials")
+    public void bookItUsersTest(Map<String, String> credential) {
+        System.out.println("credential = " + credential);
+    }
 }
