@@ -25,6 +25,6 @@ public abstract class BookItTestBase {
                 .when().get("/sign")
                 .then().statusCode(200)
                 .and().extract().body().path("accessToken");
-       return accessToken;
+       return "Bearer " + accessToken;
     }
 }
