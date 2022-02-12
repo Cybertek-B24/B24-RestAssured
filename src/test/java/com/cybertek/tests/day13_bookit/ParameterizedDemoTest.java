@@ -3,6 +3,7 @@ package com.cybertek.tests.day13_bookit;
 import com.cybertek.utilities.ExcelUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
@@ -40,4 +41,18 @@ public class ParameterizedDemoTest {
     public void bookItUsersTest(Map<String, String> credential) {
         System.out.println("credential = " + credential);
     }
+
+    @ParameterizedTest
+    @CsvSource({
+            "1 , 4",
+            "10 , 3",
+            "5 , 9",
+            "44, 33"
+    })
+    public void addNumbers(int num1, int num2) {
+        System.out.println("num1 = " + num1);
+        System.out.println("num2 = " + num2);
+        System.out.println("sum = " + (num1 + num2));
+    }
+
 }
