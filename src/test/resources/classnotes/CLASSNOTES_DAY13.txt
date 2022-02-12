@@ -43,11 +43,143 @@ I have ExcelUtil class that helps me to read and write to excel sheet easily.
 When I do data driven/parameterized tests and data is in excel file.
 I use @ParameterizedTest annotation in Junit, then run test for each row in excel file.
 
+=====================================================
+
+Parameterized test using JUnit.
+We used @ParameterizedTest annotation along with @MethodSource annotation.
+
+@ParameterizedTest vs @Test
+
+@Test -> runs the test once
+
+@ParameterizedTest -> runs the test repeatedly for all sets of param inputs
+
+EX:
+
+public static List<Integer> getScores() {
+	List<Integer> scores = Arrays.asList(80, 90, 10, 50, 77);
+	return scores;
+}
+
+@ParameterizedTest
+@MethodSource("getScores")
+public void scoresTest(int score) {
+	assertThat(score, greaterThan(0));
+	if(score > 55) {
+		System.out.println("PASS - " + score);
+	} else {
+		System.out.println("FAIL - " + score);
+	}
+}
 
 
+===============================================
+
+This is similar to TestNG DataProvider.
+- it is also used to parametrize tests when we use testNG instead of JUnit.
+
+@DataProvider(name = "Map Data Test")
+public Object[][] readDetails() throws Exception {
+    HashMap<String,String> data = new HashMap<String,String>();
+    data.put("Name", "Abhishek");
+    data.put("ID", "1234");
+
+    Object[][] objData = new Object[1][1];
+    objData[0][0]= data;
+
+    return objData;
+}
+
+@Test(dataProvider = "Map Data Test")
+public void dtTestser(HashMap<String,String> data){
+    System.out.println(data);
+    String API= data.get("Name");
+    System.out.println(data.get("ID"));
+}
+
+===============================================
+
+Data Driven Testing:
+	-> when we test the module or functionality of application with multiple inputs/parameters
+	-> Data is stored in an external file and test runs for each row in that file
+	-> I have experience using:
+		- Cucumber Scenario Outline -> where I store sets of data in Examples table and scenario runs for each row in the table
+		- Using Excel file -> i have all test data in excel file, and read data using Apache POI library. And also have ExcelUtil class for easy read and write. Iterate each row in excel, or :
+		 -> And if we use JUnit, we can use @ParameterizedTest annotation with @MethodSource annotation, where we add a method that reads all rows of Excel file and returns as a list of maps. So the test will run for each row of excel
+		 -> And if we TestNG, @DataProvider could be a good option. Where one method reads and returns excel data as Object[][] (2D object array). And the test uses the inputs and runs for each row.
+
+		-> We could also store our test data in csv file, json files, yaml(similar to json but no curly braces etc)
+
+===============================================
+
+BookItTestBase
+
+	@BeforeAll
+    public static void setUp() {
+        baseURI = ConfigurationReader.getProperty("bookit.base.url");
+    }
+
+    public String getAccessToken(String email, String password) {
+
+    }
+
+===============================================
+
+RequestSpecification
 
 
+ResponseSpecification
 
+We can use the above to predefine our request parts, or response parts in our api call.
 
+RequestSpecification rs = given().accept(Application.JSON)
+						.and().pathParam("campus_location","IL");
 
+	given(rs).when.get(...)
 
+	given().spec(rs).get(...)
+
+ResponseSpecification resSpec = expect().statusCode(200)
+                .and().contentType(ContentType.JSON)
+                .and().body("name" , is("mit");
+
+=====================================================
+
+REQUEST:
+	-> GET, POST, PUT, DELETE, PATCH to API ENDPOINT/URL
+	-> headers -> contentType, accept, Authorization
+	-> params -> path, query
+	-> JSON body -> post, put, patch
+
+	RequestSpecification could make some parts of request - reusable by storing into a variable of type RequestSpecification.
+
+RESPONSE
+	-> status code
+	-> headers
+	-> json response body
+
+	ResponseSpecification could make some parts of response validation reusable.
+
+	json response body -> could be verified by using many ways:
+							-> path method
+							-> json path
+							-> convert to java collection
+							-> convert to pojo
+
+	If we want to use lets say map with RequestSpecification, then we can include like this:
+
+	ResponseSpecification resSpec = expect().statusCode(200)
+                .and().contentType(ContentType.JSON)
+                .and().extract().body().as(Map.class);
+
+     Map<String, Object> jsonMap = when().get(/url).
+     								then().spec(resSpec);
+========================
+
+Summary:
+	-> Authorization token request example with BookIt
+	-> data driven test with excel and @ParametrizedTest
+	-> BookIt testbase
+	-> reusable Response/Request specs
+
+=========================================

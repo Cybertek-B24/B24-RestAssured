@@ -5,6 +5,7 @@ import com.cybertek.utilities.ConfigurationReader;
 import io.restassured.http.ContentType;
 import io.restassured.path.json.JsonPath;
 import io.restassured.specification.RequestSpecification;
+import io.restassured.specification.ResponseSpecification;
 import org.junit.jupiter.api.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -51,8 +52,20 @@ public class BookItCampusTest extends BookItTestBase {
 
     @Test
     public void getRoomInfoTest() {
+        /**
+         * store details of response verification into a variable.
+         * For reusability
+         */
+        ResponseSpecification resSpec = expect().statusCode(200)
+                .and().contentType(ContentType.JSON)
+                .and().body("name" , is("mit"),
+                            "description" , is("mens et manus"),
+                            "capacity", is(6));
+
+        given().accept(ContentType.JSON)
+                .and().header("Authorization", accessToken)
+                .when().get("/api/rooms/mit")
+                .then().spec(resSpec);
 
     }
-
-
 }
