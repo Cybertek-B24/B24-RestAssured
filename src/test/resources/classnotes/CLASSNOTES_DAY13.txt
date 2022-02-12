@@ -1,0 +1,53 @@
+
+02/12/2022
+----------
+
+BookIt application and API
+--------------------------
+
+2 campuses: VA -> 2 offices with different rooms:
+					=> light side:
+							-> room1
+							-> ...
+					=> dark side:
+							-> room1
+							-> ...
+			IL -> 1 with different rooms:
+					=> room1
+					=> ...
+
+Authentication :
+	-> basic authentication => pass username and password with each request
+	-> Token based authentication => send request to /signin endpoint with credentials then extract access token
+		=> pass that token for all other endpoints of the application
+
+
+LOGIN process:
+	=> UI -> login page > enter credentials and submit > homepage is displayed then I know I successfully logged in.
+		Meaning my credentials were correct and accepted.
+			-> if credentials are wrong, then some error message is displayed
+
+	=> API -> to test credentials login => send request to /signin endpoint wih credentials then verify status code is 200 and verify token is generated
+
+=======================================
+
+add new package day13_bookit
+
+add new class BookItLoginApiTest
+
+Nadiia Piekh — Today at 12:40 PM
+@Murodil for the Interview Question how to you read from the excel sheet, can we now say I use Parameterized Test n my framework?
+
+I use Apache POI library to read data from excel.
+I have ExcelUtil class that helps me to read and write to excel sheet easily.
+When I do data driven/parameterized tests and data is in excel file.
+I use @ParameterizedTest annotation in Junit, then run test for each row in excel file.
+
+
+
+
+
+
+
+
+
